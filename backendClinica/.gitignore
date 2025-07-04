@@ -3,3 +3,6 @@
 /bin/
 /obj/
 /dist/
+
+#Gestor de paquetes
+bun.lock

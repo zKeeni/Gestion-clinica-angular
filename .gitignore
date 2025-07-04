@@ -3,3 +3,6 @@
 
 #Carpeta de dependencias
 node_modules
+
+#Gestor de paquetes
+bun.lock
