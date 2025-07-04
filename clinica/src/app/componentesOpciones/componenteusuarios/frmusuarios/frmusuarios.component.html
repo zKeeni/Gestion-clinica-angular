@@ -1,0 +1,121 @@
+<!-- FALTA EL NG SUBMIT -->
+<form [formGroup]="frmUsuario" (ngSubmit)="guardarUsuario()" >
+    <h2
+      style="text-align: center"
+      class="text-base/7 font-semibold text-gray-900"
+    >
+      USUARIOS 
+    </h2>
+    <div class="space-y-12">
+      
+      <div class="border-b border-gray-900/10 pb-12">
+        
+        <p class="mt-1 text-sm/6 text-gray-600"></p>
+  
+        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div class="sm:col-span-2 sm:col-start-1">
+            <label for="nombre_usuario" class="block text-sm/6 font-medium text-gray-900"
+              >Usuario</label
+            >
+            <div class="mt-2">
+              <input
+                formControlName="txtNombreUsuario"
+                type="text"
+                name="codigoinpt"
+                id="nombre_usuario"
+                autocomplete="address-level2"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+  
+              <div>
+                <small
+                  *ngIf="
+                    frmUsuario.get('txtNombre')?.invalid &&
+                    frmUsuario.get('txtNombre')?.touched
+                  "
+                  class="msgerro"
+                >
+                  * El nombre de la especialidad es obligatoria.
+                </small>
+
+
+
+              </div>
+            </div>
+          </div>
+  
+          <div class="sm:col-span-2">
+            <label for="contrasenia" class="block text-sm/6 font-medium text-gray-900"
+              >Contraseña</label
+            >
+            <div class="mt-2">
+              <input
+                formControlName="txtContrasenia"
+                type="password"
+                name="first-name"
+                id="contrasenia"
+                autocomplete="given-name"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
+          </div>
+
+
+
+          <div class="sm:col-span-2">
+            <label for="rol" class="block text-sm/6 font-medium text-gray-900"
+              >Roles</label
+            >
+            <div class="mt-2">
+              <select formControlName="cbxRoles" id="rol"
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300"
+              (change)="onRoleChange($event)"
+              >
+        <option value="" disabled class="text-gray-400">Seleccione un rol</option>
+        <option *ngFor="let rol of listaRoles" [value]="rol.codigo">
+          {{ rol.nombre }}
+        </option>
+      </select>
+            </div>
+          </div>
+
+
+          <div class="sm:col-span-2" 
+          *ngIf="isMedicoSelected"
+          >
+
+            <label for="medico" class="block text-sm/6 font-medium text-gray-900"
+              >Medicos</label
+            >
+            <div class="mt-2">
+              <select formControlName="cbxMedicos" id="medico"
+              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300">
+        <option value="" disabled class="text-gray-400">Seleccione un médico</option>
+        <option *ngFor="let medico of listaMedicoSinUsuario" [value]="medico.codigo">
+         Dr. {{ medico.nombre }} {{ medico.apellido }}
+        </option>
+      </select>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  
+    <div class="mt-6 flex items-center justify-end gap-x-6">
+      <a    routerLink="../../listaespecialidades">
+        <button type="button" class="text-sm/6 font-semibold text-gray-900" (click)="salirSinGuardar()">
+          Cancelar
+        </button>
+      </a>
+      <button
+        type="submit"
+        class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      >
+        Guardar
+      </button>
+    </div>
+  </form>
+  
+  

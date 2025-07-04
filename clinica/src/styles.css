@@ -1,0 +1,53 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+@tailwind "tailwindcss";
+
+
+
+
+.colorStandar {
+
+    background-color: hsl(222.08deg 46.5% 50.24%)
+}
+
+.colorBtnBusquedas {
+
+    background-color: hsl(235.25deg 6.31% 46.53%);
+}
+
+.colorIconosSliderStandar {
+
+    --tw-text-opacity: 1;
+    color: rgb(0, 0, 0);
+
+
+}
+
+.colorBordeIcSliderStan {
+
+    background-color: rgb(255 255 255 / 61%)
+}
+
+.numletrasidebar {
+    font-size: 15px;
+}
+
+
+.bg_gris {
+    background-color: hsl(235.25deg 6.31% 46.53%);
+
+
+}
+
+.btn-eliminacion {
+    background-color: rgba(245, 68, 68, 0.743);
+}
+
+.msgerro {
+    color: #ee1010;
+    font-size: 11px;
+    font-family: 'Arial', sans-serif;
+    margin-top: 4px;
+    display: block;
+}

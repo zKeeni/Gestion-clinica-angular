@@ -1,0 +1,83 @@
+<div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+  <div
+    class="flex bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full"
+  >
+    <div
+      class="hidden lg:flex lg:w-1/2 bg-blue-900 items-center justify-center"
+    >
+      <img
+        src="/iconoestetocopio.png"
+        alt="Estetoscopio"
+        class="w-2/3 max-w-sm"
+      />
+    </div>
+
+    <div class="w-full lg:w-1/2 p-8 md:p-16">
+      <h1 class="text-3xl font-bold text-blue-900 text-center mb-6">
+        !Bienvenido de nuevo!
+      </h1>
+      <p class="text-gray-600 text-center mb-8">
+        Inicia sesión para acceder al sistema
+      </p>
+
+      <form [formGroup]="formLogin" (ngSubmit)="Login()">
+        <div class="mb-4">
+          <label for="username" class="block text-gray-700 font-medium mb-2"
+            >Nombre de Usuario</label
+          >
+          <input
+            type="text"
+            formControlName="usuario"
+            id="username"
+            class="w-full border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="password" class="block text-gray-700 font-medium mb-2"
+            >Contraseña</label
+          >
+          <input
+            type="password"
+            formControlName="password"
+            id="password"
+            class="w-full border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="mb-4 flex justify-between items-center">
+          <label class="flex items-center text-gray-600">
+            <input type="checkbox" id="remember" class="mr-2" />
+            Recordar
+          </label>
+          <a href="#" class="text-blue-500 hover:underline"
+            >¡Has olvidado tu contraseña?</a
+          >
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="!formLogin.valid"
+          class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+        >
+          Acceder
+        </button>
+      </form>
+
+      <div class="my-6 flex items-center">
+        <div class="w-full border-t border-gray-300"></div>
+        <span class="px-4 text-gray-500">o</span>
+        <div class="w-full border-t border-gray-300"></div>
+      </div>
+
+      <div class="text-center">
+        <p class="text-gray-600">
+          ¿No tienes una cuenta?
+          <a href="#" class="text-blue-500 hover:underline">Sign up here</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<h2 style="text-align: center" class="text-base/7 font-semibold text-gray-900">
+  LISTADO DE CONSULTAS
+</h2>
+
+<div class="parent">
+  <div *appMostrarSiRol="['administrador']"  class="div1">
+    <select
+      formControlName="selectMedico"
+      name="selectMedico"
+      id="selectMedico"
+      (change)="onSelectChange($event)"
+      class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer"
+    >
+      <option *ngFor="let medico of listaMedicos" [value]="medico.codigo">
+        Dr.{{ medico.nombre }} {{ medico.apellido }}
+      </option>
+    </select>
+  </div>
+</div>
+<ul role="list" class="divide-y divide-gray-100">
+  <li class="flex justify-between gap-x-6 py-5">
+    <div class="flex min-w-0 gap-x-4">
+      <div class="min-w-0 flex-auto">
+        <p
+          style="text-align: center"
+          class="text-sm/6 font-semibold text-gray-900"
+        >
+          PACIENTE
+        </p>
+      </div>
+    </div>
+    <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+      <p class="text-sm/6 text-gray-900">FECHA / HORA</p>
+    </div>
+    <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+      <p class="text-sm/6 text-gray-900">ESTADO</p>
+    </div>
+    <div
+      class="hidden shrink-0 sm:flex sm:flex-col sm:items-end justify-center"
+    >
+      <p class="text-sm/6 text-gray-900">ACCIÓN</p>
+    </div>
+  </li>
+
+  <li
+    *ngFor="let citasPendientes of listaCitasPacientesP"
+    class="flex justify-between gap-x-6 py-5"
+  >
+    <div class="flex min-w-0 gap-x-4">
+      <img
+        class="size-12 flex-none rounded-full bg-gray-50"
+        src="https://static.vecteezy.com/system/resources/previews/004/201/874/non_2x/patient-with-mask-in-bed-covid-19-pandemic-free-vector.jpg"
+        alt=""
+      />
+      <div class="min-w-0 flex-auto">
+        <p class="text-sm/6 font-semibold text-gray-900">
+          {{ citasPendientes.nombre_completo }}
+        </p>
+        <p class="mt-1 truncate text-xs/5 text-gray-500">
+          {{ citasPendientes.corrreo }}
+        </p>
+        <p class="mt-1 truncate text-xs/5 text-gray-500">
+          {{ citasPendientes.telefono }}
+        </p>
+      </div>
+    </div>
+    <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+      <p class="text-sm/6 text-gray-900">{{ citasPendientes.fecha_cita }}</p>
+      <p class="mt-1 text-xs/5 text-gray-500">
+        {{ citasPendientes.hora_cita }}
+      </p>
+    </div>
+    <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+      <div class="mt-1 flex items-center gap-x-1.5">
+        <div class="flex-none rounded-full bg-emerald-500/20 p-1">
+          <div class="size-1.5 rounded-full bg-emerald-500"></div>
+        </div>
+        <p class="text-xs/5 text-gray-500">
+          {{ citasPendientes.estado_cita_texto }}
+        </p>
+      </div>
+    </div>
+    <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+      <button
+        (click)="RealizarConsulta(citasPendientes)"
+        class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+        type="button"
+      >
+        <span
+          class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+            class="w-4 h-4"
+          >
+            <path
+              d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"
+            ></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </li>
+</ul>

@@ -1,0 +1,168 @@
+<h2 style="text-align: center" class="text-base/7 font-semibold text-gray-900">
+  LISTADO DE CONSULTAS
+</h2>
+<br />
+<form [formGroup]="formListarConsulta">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">  
+
+    <div class="">
+      <input
+      formControlName="txtCedulaPaciente"
+        class="inline w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-3 leading-5 placeholder-gray-500 focus:border-indigo-500 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+        placeholder="Ingrese la cedula del paciente"
+        type="search"
+        autofocus=""
+        value=""
+      />
+    </div>
+    <div  *appMostrarSiRol="['administrador']"      class="">
+      <select
+        formControlName="selectMedico"
+        name="selectMedico"
+        id="selectMedico"
+        (change)="onSelectChange($event)"
+        class="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer"
+      >
+        <option *ngFor="let medico of listaMedicos" [value]="medico.codigo">
+          Dr.{{ medico.nombre }} {{ medico.apellido }}
+        </option>
+      </select>
+    </div>
+    <div class="flex items-center gap-2">
+      <!-- Checkbox -->
+      <input
+      formControlName="checkCanlendario"
+        type="checkbox"
+        id="cbox1"
+        value="first_checkbox"
+        class="h-5 w-5"
+      />
+    
+      <!-- Input Date -->
+      <input
+        formControlName="txtFechaInicio"
+        type="date"
+        name="city"
+        id="city"
+        autocomplete="address-level2"
+        class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm"
+      />
+    </div>
+
+    <div class="">
+
+       <input
+    formControlName="txtFechaFin"
+    type="date"
+    name="city"
+    id="city"
+    autocomplete="address-level2"
+    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+  />
+   
+
+    </div>
+    <div class="">
+      <button
+        (click)="this.listarHistorialFilto()"
+        type="button"
+        class="mt-3 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+      >
+        Buscar Consulta
+      </button>
+    </div>
+  </div>
+</form>
+<br />
+<div
+  class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border"
+>
+  <table class="w-full text-left table-auto min-w-max">
+    <thead>
+      <tr>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-normal leading-none text-slate-500">
+            CODIGO CONSULTA
+          </p>
+        </th>
+
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-normal leading-none text-slate-500">
+            FECHA
+          </p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-normal leading-none text-slate-500">
+            CEDULA PACIENTE
+          </p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-normal leading-none text-slate-500">
+            NOMBRES DEL PACIENTE
+          </p>
+        </th>
+
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-normal leading-none text-slate-500">
+            MEDICO
+          </p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-normal leading-none text-slate-500">
+            ESPECIALIDAD
+          </p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-normal leading-none text-slate-500">
+            OBSERVACIONES
+          </p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-normal leading-none text-slate-500">
+            Acción
+          </p>
+        </th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let historial of this.listaHistorial">
+      <tr class="hover:bg-slate-50">
+        <td class="p-4 border-b border-slate-200 py-5">
+          <p class="text-sm text-slate-500">{{ historial.codigo_consulta }}</p>
+        </td>
+        <td class="p-4 border-b border-slate-200 py-5">
+          <p class="text-sm text-slate-500">{{ historial.fecha_consulta }}</p>
+        </td>
+        <td class="p-4 border-b border-slate-200 py-5">
+          <p class="text-sm text-slate-500">{{ historial.cedula_paciente }}</p>
+        </td>
+        <td class="p-4 border-b border-slate-200 py-5">
+          <p class="text-sm text-slate-500">
+            {{ historial.nombre_paciente }} {{ historial.apellido_paciente }}
+          </p>
+        </td>
+        <td class="p-4 border-b border-slate-200 py-5">
+          <p class="text-sm text-slate-500">
+            Dr. {{ historial.nombre_medico }} {{ historial.apellido_medico }}
+          </p>
+        </td>
+        <td class="p-4 border-b border-slate-200 py-5">
+          <p class="text-sm text-slate-500">{{ historial.especialidad }}</p>
+        </td>
+        <td class="p-4 border-b border-slate-200 py-5">
+          <p class="text-sm text-slate-500">{{ historial.observaciones }}</p>
+        </td>
+
+        <td class="p-4 border-b border-blue-gray-50">
+          <button
+            (click)="abrirReporte(historial.codigo_consulta)"
+            class="relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            type="button"
+          >
+            <i class="fas fa-2x fa-solid fa-eye colorfa-ojo"> </i>
+          </button>
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

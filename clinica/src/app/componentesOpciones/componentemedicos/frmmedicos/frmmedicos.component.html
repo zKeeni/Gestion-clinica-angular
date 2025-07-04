@@ -1,0 +1,557 @@
+<form [formGroup]="frmMedico" (ngSubmit)="guardarMedico()">
+  <div class="space-y-5">
+    <h1
+      style="text-align: center"
+      class="text-base/7 font-semibold text-gray-900"
+    >
+      ACTUALIZAR MEDICO
+    </h1>
+
+    <div class="border-b border-gray-900/10 pb-12">
+      <!-- DIV DE INFORMACION PERSONAL -->
+      <div class="border-b border-gray-900/10 pb-12">
+        <!-- CONTENEDOR DE TODOS LOS ELEMENTOS -->
+        <div class="grid grid-cols-1 gap-x-15 gap-y-5 sm:grid-cols-2">
+          <!-- 1 COLUMNA -->
+          <div class="grid grid-cols-1 gap-x-15 gap-y-5 sm:grid-cols-1">
+            <!-- encabezado de columna -->
+            <h2 class="text-base/7 font-semibold text-gray-900">
+              Información Personal
+            </h2>
+
+            <!-- campo cedula -->
+            <div>
+              <label
+                for="cedula"
+                class="block text-sm/6 font-medium text-gray-900"
+              >
+                Cédula de Identidad
+              </label>
+
+              <div class="mt-2">
+                <input
+                  formControlName="txtCedula"
+                  type="text"
+                  id="cedula"
+                  autocomplete="address-level2"
+                  placeholder="Ingresa tu cédula (10 dígitos)"
+                  maxlength="10"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <div
+                *ngIf="
+                  frmMedico.get('txtCedula')?.invalid &&
+                  frmMedico.get('txtCedula')?.touched
+                "
+                class="msgerro"
+              >
+                <small *ngIf="frmMedico.get('txtCedula')?.errors?.['required']"
+                  >* Dato obligatorio.</small
+                >
+              </div>
+            </div>
+
+            <!-- campo nombre -->
+            <div>
+              <label
+                for="nombres"
+                class="block text-sm/6 font-medium text-gray-900"
+              >
+                Nombres
+              </label>
+
+              <div class="mt-2">
+                <input
+                  formControlName="txtNombres"
+                  type="text"
+                  id="nombres"
+                  autocomplete="given-name"
+                  placeholder="Ejemplo: Juan Sebastián"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <div
+                *ngIf="
+                  frmMedico.get('txtNombres')?.invalid &&
+                  frmMedico.get('txtNombres')?.touched
+                "
+                class="msgerro"
+              >
+                <small *ngIf="frmMedico.get('txtNombres')?.errors?.['required']"
+                  >* Dato obligatorio.</small
+                >
+              </div>
+            </div>
+
+            <!-- campo apellido -->
+            <div>
+              <label
+                for="apellidos"
+                class="block text-sm/6 font-medium text-gray-900"
+                >Apellidos
+              </label>
+
+              <div class="mt-2">
+                <input
+                  formControlName="txtApellidos"
+                  type="text"
+                  name="last-name"
+                  id="apellidos"
+                  autocomplete="family-name"
+                  placeholder="Ejemplo: Pérez Pazmiño"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <div
+                *ngIf="
+                  frmMedico.get('txtApellidos')?.invalid &&
+                  frmMedico.get('txtApellidos')?.touched
+                "
+                class="msgerro"
+              >
+                <small
+                  *ngIf="frmMedico.get('txtApellidos')?.errors?.['required']"
+                  >* Dato obligatorio.</small
+                >
+              </div>
+            </div>
+
+            <!-- campo fecha nacimiento -->
+            <div>
+              <label
+                for="fechaNacimiento"
+                class="block text-sm/6 font-medium text-gray-900"
+                >Fecha Nacimiento
+              </label>
+
+              <div class="mt-2">
+                <input
+                  formControlName="txtFechNac"
+                  type="date"
+                  id="fechaNacimiento"
+                  autocomplete="address-level2"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <div
+                *ngIf="
+                  frmMedico.get('txtFechNac')?.invalid &&
+                  frmMedico.get('txtFechNac')?.touched
+                "
+                class="msgerro"
+              >
+                <small *ngIf="frmMedico.get('txtFechNac')?.errors?.['required']"
+                  >* Dato obligatorio.</small
+                >
+              </div>
+            </div>
+
+            <!-- campo telefono -->
+            <div>
+              <label
+                for="telefono"
+                class="block text-sm/6 font-medium text-gray-900"
+                >Telefono
+              </label>
+
+              <div class="mt-2">
+                <input
+                  formControlName="txtNumTelefono"
+                  type="text"
+                  id="telefono"
+                  autocomplete="address-level1"
+                  placeholder="09999999999 (10 dígitos)"
+                  maxlength="10"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+              <div
+                *ngIf="
+                  frmMedico.get('txtNumTelefono')?.invalid &&
+                  frmMedico.get('txtNumTelefono')?.touched
+                "
+                class="msgerro"
+              >
+                <small
+                  *ngIf="frmMedico.get('txtNumTelefono')?.errors?.['required']"
+                  >* Dato obligatorio.</small
+                >
+              </div>
+            </div>
+
+            <!-- campo correo -->
+            <div>
+              <label
+                for="correo"
+                class="block text-sm/6 font-medium text-gray-900"
+              >
+                Correo electrónico
+              </label>
+
+              <div class="mt-2">
+                <input
+                  formControlName="txtCorreo"
+                  type="email"
+                  id="correo"
+                  autocomplete="email"
+                  placeholder="Ejemplo: usuario@email.com"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+
+              <div
+                *ngIf="
+                  frmMedico.get('txtCorreo')?.invalid &&
+                  frmMedico.get('txtCorreo')?.touched
+                "
+                class="msgerro"
+              >
+                <small *ngIf="frmMedico.get('txtCorreo')?.errors?.['required']"
+                  >* Dato obligatorio.</small
+                >
+              </div>
+            </div>
+
+            <!-- campo direccion -->
+            <div class="col-span-full">
+              <label
+                for="direccion"
+                class="block text-sm/6 font-medium text-gray-900"
+                >Direccion Domiciliar
+              </label>
+
+              <div class="mt-2">
+                <textarea
+                  formControlName="txtDireccion"
+                  id="direccion"
+                  rows="3"
+                  placeholder="Ejemplo: Av. Los Pinos 123, Edificio Primavera, Quito, Ecuador"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                ></textarea>
+              </div>
+
+              <div
+                *ngIf="
+                  frmMedico.get('txtDireccion')?.invalid &&
+                  frmMedico.get('txtDireccion')?.touched
+                "
+                class="msgerro"
+              >
+                <small
+                  *ngIf="frmMedico.get('txtDireccion')?.errors?.['required']"
+                  >* Dato obligatorio.</small
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 COLUMNA -->
+          <div class="grid grid-cols-1 gap-x-15 gap-y-5 sm:grid-cols-1">
+            <!-- encabezado de columna -->
+            <h2 class="text-base/7 font-semibold text-gray-900">
+              Información Profesional
+            </h2>
+
+            <!-- campo licencia -->
+            <div>
+              <label
+                for="licencia"
+                class="block text-sm/5 font-medium text-gray-900"
+                >Licencia Medica
+              </label>
+
+              <div class="mt-2">
+                <input
+                  formControlName="txtLicenciaMedica"
+                  type="text"
+                  id="licencia"
+                  autocomplete="address-level1"
+                  placeholder="LM999"
+                  maxlength="10"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+              <div
+              *ngIf="
+                frmMedico.get('txtLicenciaMedica')?.invalid &&
+                frmMedico.get('txtLicenciaMedica')?.touched
+              "
+              class="msgerro"
+            >
+              <small
+                *ngIf="frmMedico.get('txtLicenciaMedica')?.errors?.['required']"
+                >* Dato obligatorio.</small
+              >
+            </div>
+              
+            </div>
+
+            <!-- campo consultorio -->
+            <div>
+              <label
+                for="consultorio"
+                class="block text-sm/5 font-medium text-gray-900"
+                >Consultorio</label
+              >
+
+              <div class="mt-2">
+                <select
+                  formControlName="cbxConsultorio"
+                  id="consultorio"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300"
+                >
+                  <!-- Opción por defecto con texto más claro -->
+                  <option value="" disabled selected class="text-gray-400">
+                    Seleccione un consultorio
+                  </option>
+
+                  <!-- Opciones dinámicas -->
+                  <option
+                    *ngFor="let consultorio of listaConsultorios"
+                    [value]="consultorio.codigo"
+                  >
+                    {{ consultorio.nombre }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- campo horario -->
+            <div>
+              <label
+                for="horario"
+                class="block text-sm/5 font-medium text-gray-900"
+                >Horario</label
+              >
+
+              <div class="flex items-center gap-2">
+                <select
+                  formControlName="cbxHorario"
+                  id="horario"
+                  class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 outline-gray-300"
+                >
+                  <!-- Opción por defecto con texto más claro -->
+                  <option value="" disabled selected class="text-gray-400">
+                    Seleccione un horario
+                  </option>
+
+                  <!-- Opciones dinámicas -->
+                  <option
+                    *ngFor="let horario of listaHorarios"
+                    [value]="horario.codigo"
+                  >
+                    {{ horario.hora_inicio }} - {{ horario.hora_fin }}
+                  </option>
+                </select>
+
+                <button
+                  type="button"
+                  (click)="abrirModalAgregarHorario()"
+                  class="flex items-center gap-3 rounded-lg bg-gray-900 py-3 px-4 text-white shadow-md hover:shadow-lg"
+                >
+                  <i class="fa fa-plus fa-2" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Combobox y boton especialidades -->
+            <div class="grid grid-cols-1 gap-x-10 gap-y-5 sm:grid-cols-2">
+              <div>
+                <select
+                  formControlName="cbxEspecialidad"
+                  id="especialidad"
+                  name="especialidad"
+                  class="block w-full h-full rounded-md bg-white px-3 py-1 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm"
+                >
+                  <!-- Opción por defecto con texto más claro -->
+                  <option value="" disabled selected class="text-gray-400">
+                    Seleccione una opcion
+                  </option>
+
+                  <!-- Opciones dinámicas -->
+                  <option
+                    *ngFor="let especialidad of listaEspecialidades"
+                    [value]="especialidad.codigo"
+                  >
+                    {{ especialidad.nombre }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Boton para asginar especialidad -->
+              <button
+                class="flex select-none items-center gap-3 rounded-lg bg-gray-900 py-3 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+                (click)="seleccionarEspecialidad()"
+              >
+                Asignar especialidad
+              </button>
+            </div>
+
+            <!-- TABLA ESPECIALIDADES SELECCIONADAS -->
+            <div>
+              <div
+                class="relative flex flex-col w-full h-full overflow-auto text-gray-700 bg-white shadow-md bg-clip-border"
+              >
+                <table
+                  class="w-full text-left table-auto border-collapse border border-slate-400 rounded-lg"
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        class="p-4 border-b border-slate-400 py-5 text-center"
+                      >
+                        Especialidad
+                      </th>
+                      <th
+                        *ngIf="especialidadesSeleccionadas.length > 0"
+                        class="p-4 border-b border-slate-400 py-5 text-center"
+                      >
+                        Eliminar
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Si la lista está vacía, mostramos el mensaje -->
+                    <tr
+                      *ngIf="especialidadesSeleccionadas.length === 0"
+                      class="text-center py-6"
+                    >
+                      <td colspan="2" class="text-slate-500 py-6">
+                        No tiene especialidades asignadas.
+                      </td>
+                    </tr>
+                    <!-- Mostrar especialidades solo si hay elementos -->
+                    <tr
+                      *ngFor="let especialidad of especialidadesSeleccionadas"
+                      class="hover:bg-slate-50"
+                    >
+                      <td
+                        class="p-4 border-b border-slate-400 py-5 text-center"
+                      >
+                        <p class="text-sm text-slate-500">
+                          {{ especialidad.nombre }}
+                        </p>
+                      </td>
+                      <td
+                        class="p-4 border-b border-slate-400 py-5 text-center"
+                      >
+                        <button
+                          class="btn-eliminacion relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                          type="button"
+                          (click)="
+                            eliminarEspecialidadSeleccionada(
+                              especialidad.codigo
+                            )
+                          "
+                        >
+                          <i
+                            class="fas fa-regular fa-trash"
+                            style="color: aliceblue"
+                          ></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Tabla de Especialidades ASIGNADOS -->
+            <div>
+              <div
+                class="relative flex flex-col w-full h-full overflow-auto text-gray-700 bg-white shadow-md bg-clip-border"
+              >
+                <table
+                  class="w-full text-left table-auto border-collapse border border-slate-400 rounded-lg"
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        class="p-4 border-b border-slate-400 py-5 text-center"
+                      >
+                        Especialidad
+                      </th>
+                      <!-- Mostrar la columna de "Eliminar" solo si hay más de 1 especialidad -->
+                      <th
+                        *ngIf="listaEspecialidadesMedico.length > 0"
+                        class="p-4 border-b border-slate-400 py-5 text-center"
+                      >
+                        Eliminar
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Si la lista está vacía, mostramos el mensaje -->
+                    <tr
+                      *ngIf="listaEspecialidadesMedico.length === 0"
+                      class="text-center py-6"
+                    >
+                      <td colspan="2" class="text-slate-500 py-6">
+                        No tiene especialidades asignadas.
+                      </td>
+                    </tr>
+                    <!-- Mostrar especialidades solo si hay elementos -->
+                    <tr
+                      *ngFor="let especialidad of listaEspecialidadesMedico"
+                      class="hover:bg-slate-50"
+                    >
+                      <td
+                        class="p-4 border-b border-slate-400 py-5 text-center"
+                      >
+                        <p class="text-sm text-slate-500">
+                          {{ especialidad.especialidad }}
+                        </p>
+                      </td>
+                      <td
+                        class="p-4 border-b border-slate-400 py-5 text-center"
+                      >
+                        <button
+                          class="btn-eliminacion relative h-10 max-h-[40px] w-10 max-w-[40px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-gray-900 transition-all hover:bg-gray-900/10 active:bg-gray-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                          type="button"
+                          (click)="
+                            eliminarEspecialidadAsignada(especialidad.codigo)
+                          "
+                        >
+                          <i
+                            class="fas fa-regular fa-trash"
+                            style="color: aliceblue"
+                          ></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3 COLUMNA -->
+          <div class="grid grid-cols-1 gap-x-15 gap-y-5 sm:grid-cols-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-x-6">
+    <button
+      type="button"
+      class="text-sm font-semibold text-gray-900 border-2 border-gray-900 rounded-lg px-4 py-2 hover:border-gray-500 transition"
+      (click)="salirSinGuardar()"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="submit"
+      class="text-sm font-semibold rounded-lg px-4 py-2 bg-gray-900 text-white border-2 border-gray-900 shadow-md shadow-gray-900/10 transition-all hover:bg-gray-700 hover:border-gray-700"
+    >
+      Guardar
+    </button>
+  </div>
+</form>
