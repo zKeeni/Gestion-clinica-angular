@@ -59,7 +59,7 @@
 
             <!-- Filtro por Rango de Fechas -->
             <div class="flex items-center gap-3">
-              <div class="flex items-center p-3 rounded-lg border transition-all duration-200"
+              <div class="flex items-center p-3 rounded-lg  transition-all duration-200"
                    [ngClass]="{
                      'bg-blue-50 border-blue-200': formListarConsulta.get('checkCanlendario')?.value,
                      'bg-gray-50 border-gray-200': !formListarConsulta.get('checkCanlendario')?.value
@@ -68,7 +68,7 @@
                   formControlName="checkCanlendario"
                   type="checkbox"
                   id="filtroFecha"
-                  class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                  class="h-4 w-4 text-blue-600  rounded focus:ring-blue-500 cursor-pointer"
                 />
                 <label for="filtroFecha" class="ml-2 text-sm font-medium cursor-pointer transition-all duration-200"
                        [ngClass]="{
