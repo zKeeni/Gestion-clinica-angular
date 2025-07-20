@@ -1,23 +1,16 @@
 <div class="flex h-screen items-center justify-center bg-gray-200 p-5">
-  <div class="flex shadow-lg rounded-lg bg-white overflow-hidden max-w-4xl w-full">
-    <div
-      class="bg-blue-500 flex-col items-center justify-center w-1/2 p-5"
-    >
-      <h1 class="text-3xl font-bold text-white text-center mb-2 w-full">
-        ¡Bienvenido de nuevo!
-      </h1>
-      <p class="text-white text-center mb-2 w-full">
-        Inicia sesión para acceder al sistema
-      </p>
+  <div
+    class="flex shadow-lg rounded-lg bg-white overflow-hidden max-w-4xl w-full"
+  >
+    <div class="bg-blue-500 flex-col items-center justify-center w-1/2 p-5">
       <img
         src="/iconoestetocopio.png"
         alt="Estetoscopio"
-        class="w-full max-w-sm"
+        class="w-full max-w-sm mx-auto"
       />
-      <div class="text-center">
+      <!-- <div class="text-center">
         <p class="text-white my-2">
           ¿No tienes una cuenta?
-          <!-- <a href="#" class="text-blue-500 hover:underline">Sign up here</a>. -->
         </p>
         <button
           type="submit"
@@ -26,15 +19,21 @@
         >
           Registrate
         </button>
-      </div>
+      </div> -->
     </div>
 
-    <div class="flex items-center justify-center w-full lg:w-1/2 p-8 md:p-16 ">
+    <div class="flex items-center justify-center w-full lg:w-1/2 p-8 md:p-16">
       <form [formGroup]="formLogin" (ngSubmit)="Login()" class="w-full">
-        <div class="mb-4">
-          <h1 class="text-3xl font-bold text-blue-900 mb-4 w-full">
-            INICIAR SESION
+        <div class="mb-6 text-center">
+          <h1 class="text-3xl font-bold text-blue-900 mb-2">
+            ¡Bienvenido de nuevo!
           </h1>
+          <!-- <p class="text-gray-600 mb-4">
+            Inicia sesión para acceder al sistema
+          </p> -->
+          <h2 class="text-2xl font-bold text-blue-900 mb-4">INICIAR SESION</h2>
+        </div>
+        <div class="mb-4">
           <label for="username" class="block text-gray-700 font-medium mb-2"
             >Nombre de Usuario</label
           >
@@ -67,9 +66,9 @@
             Recordar
           </label>
  -->
-          <a href="#" class="text-gray-600 hover:text-gray-800 :underline"
+          <!-- <a href="#" class="text-gray-600 hover:text-gray-800 :underline"
             >Has olvidado tu contraseña?</a
-          >
+          > -->
         </div>
 
         <button
