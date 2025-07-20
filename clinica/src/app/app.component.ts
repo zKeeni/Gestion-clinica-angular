@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { PanelprincipalComponent } from "./componentesUI/panelprincipal/panelprincipal.component";
-import { ComponenteloginComponent } from "./componentesOpciones/componentelogin/componentelogin.component";
+import { PanelprincipalComponent } from "./components/ui/panelprincipal/panelprincipal.component";
+import { ComponenteloginComponent } from "./components/pages/login/componentelogin/componentelogin.component";
 import { RouterOutlet } from '@angular/router';
 
 @Component({
