@@ -12,8 +12,8 @@ import { AlertService } from '../../servicios/Alertas/alertas.service';
 })
 export class SidebarComponent {
 
-
   openMenu: number | null = null;
+  isClosing: boolean = false;
   userRole: string = 'administrador'; 
 
   constructor(
@@ -22,8 +22,19 @@ export class SidebarComponent {
   }
 
   toggleMenu(menuId: number): void {
-  this.openMenu = this.openMenu === menuId ? null : menuId;
+    if (this.openMenu === menuId) {
+      this.isClosing = true;
+      
+      setTimeout(() => {
+        this.openMenu = null;
+        this.isClosing = false;
+      }, 300);
+    } else {
+      this.isClosing = false;
+      this.openMenu = menuId;
+    }
   }
+
   cerrarSesion(){
     this.alertaServ.preguntaRedireccion('¿CERRAR SESIÓN?', 'login');
   }
