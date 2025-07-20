@@ -1,1 +1,33 @@
-<p>validators works!</p>
+<!-- Error de validación -->
+<div
+  *ngIf="control?.invalid && (control.dirty || control.touched)"
+  class="mt-2 flex items-center gap-2 p-2 bg-red-50 rounded-lg"
+>
+  <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
+  <span class="text-red-700 text-sm">
+    <span *ngIf="control.errors?.['required']">
+      Este campo es obligatorio.
+    </span>
+    <span *ngIf="control.errors?.['email']">
+      El formato del correo electrónico no es válido.
+    </span>
+    <span *ngIf="control.errors?.['minlength']">
+      Debe tener al menos {{ control.errors?.['minlength']?.requiredLength }} caracteres.
+    </span>
+    <span *ngIf="control.errors?.['maxlength']">
+      No debe exceder {{ control.errors?.['maxlength']?.requiredLength }} caracteres.
+    </span>
+    <span *ngIf="control.errors?.['onlyNumbers']">
+      Valor no válido, ingrese solo números.
+    </span>
+    <span *ngIf="control.errors?.['tenDigits']">
+      Debe contener exactamente 10 dígitos.
+    </span>
+    <span *ngIf="control.errors?.['exactLength']">
+      Debe contener exactamente {{ control.errors?.['exactLength']?.requiredLength }} dígitos.
+    </span>
+    <span *ngIf="control.errors?.['pattern']">
+      Formato inválido.
+    </span>
+  </span>
+</div>
