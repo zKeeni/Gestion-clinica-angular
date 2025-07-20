@@ -95,7 +95,7 @@
                   type="date"
                   id="fechaNacimiento"
                   autocomplete="address-level2"
-                  class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
+                  class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm cursor-pointer"
                 />
                 <app-validators [control]="frmMedico.get('txtFechNac')!"></app-validators>
               </div>
@@ -196,7 +196,7 @@
                 <select
                   formControlName="cbxConsultorio"
                   id="consultorio"
-                  class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
+                  class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm cursor-pointer"
                 >
                   <option value="" disabled selected class="text-gray-400">
                     Seleccione un consultorio
@@ -222,7 +222,7 @@
                     <select
                       formControlName="cbxHorario"
                       id="horario"
-                      class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
+                      class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm cursor-pointer"
                     >
                       <option value="" disabled selected class="text-gray-400">
                         Seleccione un horario
@@ -239,7 +239,7 @@
                   <button
                     type="button"
                     (click)="abrirModalAgregarHorario()"
-                    class="px-4 py-3 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+                    class="px-4 py-3 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 cursor-pointer"
                     title="Agregar nuevo horario"
                   >
                     <i class="fas fa-plus"></i>
@@ -258,7 +258,7 @@
                     formControlName="cbxEspecialidad"
                     id="especialidad"
                     name="especialidad"
-                    class="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
+                    class="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm cursor-pointer"
                   >
                     <option value="" disabled selected class="text-gray-400">
                       Seleccione una especialidad
@@ -273,7 +273,7 @@
                   <button
                     type="button"
                     (click)="seleccionarEspecialidad()"
-                    class="px-6 py-3 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+                    class="px-6 py-3 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 cursor-pointer"
                   >
                     <i class="fas fa-plus mr-2"></i>
                     Asignar
@@ -423,14 +423,14 @@
         <button
           type="button"
           (click)="salirSinGuardar()"
-          class="px-6 py-3 bg-white text-gray-800 font-semibold rounded-lg shadow-md border border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+          class="px-6 py-3 bg-white text-gray-800 font-semibold rounded-lg shadow-md border border-gray-300 hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 cursor-pointer"
         >
           <i class="fas fa-times mr-2"></i>
           Cancelar
         </button>
         <button
           type="submit"
-          class="px-8 py-3 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+          class="px-8 py-3 bg-gray-800 text-white font-semibold rounded-lg shadow-md hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 cursor-pointer"
         >
           <i class="fas fa-save mr-2"></i>
           {{ eventoUpdate ? 'Actualizar Médico' : 'Guardar Médico' }}
