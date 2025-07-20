@@ -16,10 +16,10 @@ import { AlertService } from '../../../servicios/Alertas/alertas.service';
 import Swal from 'sweetalert2';
 
 @Component({
-    selector: 'app-frmpacientes',
-    imports: [ReactiveFormsModule, RouterModule, CommonModule],
-    templateUrl: './frmpacientes.component.html',
-    styleUrl: './frmpacientes.component.css'
+  selector: 'app-frmpacientes',
+  imports: [ReactiveFormsModule, RouterModule, CommonModule],
+  templateUrl: './frmpacientes.component.html',
+  styleUrl: './frmpacientes.component.css',
 })
 export class FrmpacientesComponent {
   frmPaciente: FormGroup;
@@ -37,12 +37,12 @@ export class FrmpacientesComponent {
     private route: ActivatedRoute
   ) {
     this.frmPaciente = this.formBuilder.group({
-      txtCedula: ['', Validators.required],
+      txtCedula: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       txtNombres: ['', Validators.required],
       txtApellidos: ['', Validators.required],
       txtFechNac: ['', Validators.required],
-      txtNumTelefono: ['', Validators.required],
-      txtCorreo: ['', [Validators.email]],
+      txtNumTelefono: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      txtCorreo: ['', [Validators.required, Validators.email]],
       txtDireccion: ['', Validators.required],
       txtDetalles: [''],
     });
@@ -112,7 +112,6 @@ export class FrmpacientesComponent {
       codigo: '',
     };
 
-
     if (this.eventoUpdate) {
       paciente.codigo = '' + this.codigo;
       this.pacienteServ.ActualizarPaciente(paciente).subscribe({
@@ -154,21 +153,21 @@ export class FrmpacientesComponent {
     });
   }
 
-    salirSinGuardar(): void {
-      Swal.fire({
-        title: '¿Está seguro que desea salir?',
-        text: 'Los cambios no guardados se perderán.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, salir',
-        cancelButtonText: 'Cancelar',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.router.navigate(['/home/listapacientes']);
-        }
-      });
-    }
+  salirSinGuardar(): void {
+    Swal.fire({
+      title: '¿Está seguro que desea salir?',
+      text: 'Los cambios no guardados se perderán.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, salir',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['/home/listapacientes']);
+      }
+    });
+  }
 
 }
