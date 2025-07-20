@@ -75,6 +75,26 @@ export class ValidatorsComponent {
   }
 
   /**
+   * Validador personalizado para campos select
+   * Verifica que se haya seleccionado una opción válida (no vacía, no null, no undefined)
+   */
+  static selectRequired(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    
+    // Verificar si el valor está vacío, es null, undefined o es una cadena vacía
+    if (!value || value === '' || value === null || value === undefined) {
+      return { 'selectRequired': true };
+    }
+    
+    // Verificar si el valor es "0" (que a veces se usa como valor por defecto)
+    if (value === '0' || value === 0) {
+      return { 'selectRequired': true };
+    }
+    
+    return null;
+  }
+
+  /**
    * Obtiene la longitud actual del campo
    */
   getCurrentLength(): number {

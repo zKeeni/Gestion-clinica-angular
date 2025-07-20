@@ -8,6 +8,9 @@
     <span *ngIf="control.errors?.['required']">
       Este campo es obligatorio.
     </span>
+    <span *ngIf="control.errors?.['selectRequired']">
+      Debe seleccionar una opción válida.
+    </span>
     <span *ngIf="control.errors?.['email']">
       El formato del correo electrónico no es válido.
     </span>
