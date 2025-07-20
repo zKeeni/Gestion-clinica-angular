@@ -3,3 +3,6 @@
 /bin/
 /obj/
 /dist/
+
+#bun
+bun.lock

@@ -3,3 +3,6 @@
 
 #Carpeta de dependencias
 node_modules
+
+#bun
+bun.lock
