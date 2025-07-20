@@ -202,7 +202,10 @@
                 </span>
               </td>
               <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900 w-28">
-                {{pacientes.fecha_nacimiento}}
+                <div class="flex items-center">
+                  <i class="fas fa-calendar-alt text-gray-400 mr-2 text-xs"></i>
+                  {{ formatDate(pacientes.fecha_nacimiento) }}
+                </div>
               </td>
               <td class="px-3 py-3 whitespace-nowrap w-40">
                 <div class="text-sm text-gray-900 truncate" title="{{pacientes.direccion}}">{{pacientes.direccion}}</div>

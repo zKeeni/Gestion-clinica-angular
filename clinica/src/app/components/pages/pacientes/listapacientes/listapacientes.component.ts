@@ -238,6 +238,30 @@ export class ListapacientesComponent {
     });
   }
 
+  /**
+   * Formatea una fecha al formato DD-MM-YYYY
+   */
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    
+    try {
+      const date = new Date(dateString);
+      
+      // Verificar si la fecha es válida
+      if (isNaN(date.getTime())) {
+        return dateString; // Retornar el string original si no es una fecha válida
+      }
+      
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const year = date.getFullYear();
+      
+      return `${day}-${month}-${year}`;
+    } catch (error) {
+      return dateString; // En caso de error, retornar el string original
+    }
+  }
+
   ActualizarPaciente(id: any): void {
     this.router.navigate(['home/actualizarPaciente', id]);
   }
