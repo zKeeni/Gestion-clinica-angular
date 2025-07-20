@@ -208,6 +208,7 @@
                     {{ consultorio.nombre }}
                   </option>
                 </select>
+                <app-validators [control]="frmMedico.get('cbxConsultorio')!"></app-validators>
               </div>
 
               <!-- Horario -->
@@ -217,21 +218,24 @@
                   Horario *
                 </label>
                 <div class="flex items-center gap-3">
-                  <select
-                    formControlName="cbxHorario"
-                    id="horario"
-                    class="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
-                  >
-                    <option value="" disabled selected class="text-gray-400">
-                      Seleccione un horario
-                    </option>
-                    <option
-                      *ngFor="let horario of listaHorarios"
-                      [value]="horario.codigo"
+                  <div class="flex-1">
+                    <select
+                      formControlName="cbxHorario"
+                      id="horario"
+                      class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
                     >
-                      {{ horario.hora_inicio }} - {{ horario.hora_fin }}
-                    </option>
-                  </select>
+                      <option value="" disabled selected class="text-gray-400">
+                        Seleccione un horario
+                      </option>
+                      <option
+                        *ngFor="let horario of listaHorarios"
+                        [value]="horario.codigo"
+                      >
+                        {{ horario.hora_inicio }} - {{ horario.hora_fin }}
+                      </option>
+                    </select>
+                    <app-validators [control]="frmMedico.get('cbxHorario')!"></app-validators>
+                  </div>
                   <button
                     type="button"
                     (click)="abrirModalAgregarHorario()"

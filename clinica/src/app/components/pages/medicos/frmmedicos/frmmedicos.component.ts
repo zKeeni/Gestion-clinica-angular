@@ -67,8 +67,8 @@ export class FrmmedicosComponent {
       txtCorreo: ['', [Validators.required, Validators.email]],
       txtDireccion: ['', Validators.required],
       txtLicenciaMedica: ['', Validators.required],
-      cbxConsultorio: ['', Validators.required],
-      cbxHorario: [''],
+      cbxConsultorio: ['', [Validators.required, ValidatorsComponent.selectRequired]],
+      cbxHorario: ['', ValidatorsComponent.selectRequired],
       cbxEspecialidad: [''],
     });
   }
