@@ -42,14 +42,11 @@
                   maxlength="10"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
                 />
-                <div
-                  *ngIf="frmMedico.get('txtCedula')?.invalid && frmMedico.get('txtCedula')?.touched"
-                  class="mt-1 text-red-600 text-sm"
-                >
-                  <small *ngIf="frmMedico.get('txtCedula')?.errors?.['required']">
-                    * Dato obligatorio.
-                  </small>
-                </div>
+                <app-validators 
+                  [control]="frmMedico.get('txtCedula')!"
+                  [showCounter]="true"
+                  [expectedLength]="10">
+                </app-validators>
               </div>
 
               <!-- Nombres -->
@@ -66,14 +63,7 @@
                   placeholder="Ejemplo: Juan Sebastián"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
                 />
-                <div
-                  *ngIf="frmMedico.get('txtNombres')?.invalid && frmMedico.get('txtNombres')?.touched"
-                  class="mt-1 text-red-600 text-sm"
-                >
-                  <small *ngIf="frmMedico.get('txtNombres')?.errors?.['required']">
-                    * Dato obligatorio.
-                  </small>
-                </div>
+                <app-validators [control]="frmMedico.get('txtNombres')!"></app-validators>
               </div>
 
               <!-- Apellidos -->
@@ -91,14 +81,7 @@
                   placeholder="Ejemplo: Pérez Pazmiño"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
                 />
-                <div
-                  *ngIf="frmMedico.get('txtApellidos')?.invalid && frmMedico.get('txtApellidos')?.touched"
-                  class="mt-1 text-red-600 text-sm"
-                >
-                  <small *ngIf="frmMedico.get('txtApellidos')?.errors?.['required']">
-                    * Dato obligatorio.
-                  </small>
-                </div>
+                <app-validators [control]="frmMedico.get('txtApellidos')!"></app-validators>
               </div>
 
               <!-- Fecha de Nacimiento -->
@@ -114,14 +97,7 @@
                   autocomplete="address-level2"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
                 />
-                <div
-                  *ngIf="frmMedico.get('txtFechNac')?.invalid && frmMedico.get('txtFechNac')?.touched"
-                  class="mt-1 text-red-600 text-sm"
-                >
-                  <small *ngIf="frmMedico.get('txtFechNac')?.errors?.['required']">
-                    * Dato obligatorio.
-                  </small>
-                </div>
+                <app-validators [control]="frmMedico.get('txtFechNac')!"></app-validators>
               </div>
 
               <!-- Teléfono -->
@@ -139,14 +115,11 @@
                   maxlength="10"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
                 />
-                <div
-                  *ngIf="frmMedico.get('txtNumTelefono')?.invalid && frmMedico.get('txtNumTelefono')?.touched"
-                  class="mt-1 text-red-600 text-sm"
-                >
-                  <small *ngIf="frmMedico.get('txtNumTelefono')?.errors?.['required']">
-                    * Dato obligatorio.
-                  </small>
-                </div>
+                <app-validators 
+                  [control]="frmMedico.get('txtNumTelefono')!"
+                  [showCounter]="true"
+                  [expectedLength]="10">
+                </app-validators>
               </div>
 
               <!-- Email -->
@@ -163,14 +136,7 @@
                   placeholder="Ejemplo: usuario@email.com"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
                 />
-                <div
-                  *ngIf="frmMedico.get('txtCorreo')?.invalid && frmMedico.get('txtCorreo')?.touched"
-                  class="mt-1 text-red-600 text-sm"
-                >
-                  <small *ngIf="frmMedico.get('txtCorreo')?.errors?.['required']">
-                    * Dato obligatorio.
-                  </small>
-                </div>
+                <app-validators [control]="frmMedico.get('txtCorreo')!"></app-validators>
               </div>
 
               <!-- Dirección -->
@@ -186,14 +152,7 @@
                   placeholder="Ejemplo: Av. Los Pinos 123, Edificio Primavera, Quito, Ecuador"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm resize-vertical"
                 ></textarea>
-                <div
-                  *ngIf="frmMedico.get('txtDireccion')?.invalid && frmMedico.get('txtDireccion')?.touched"
-                  class="mt-1 text-red-600 text-sm"
-                >
-                  <small *ngIf="frmMedico.get('txtDireccion')?.errors?.['required']">
-                    * Dato obligatorio.
-                  </small>
-                </div>
+                <app-validators [control]="frmMedico.get('txtDireccion')!"></app-validators>
               </div>
             </div>
           </div>
@@ -225,14 +184,7 @@
                   maxlength="10"
                   class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
                 />
-                <div
-                  *ngIf="frmMedico.get('txtLicenciaMedica')?.invalid && frmMedico.get('txtLicenciaMedica')?.touched"
-                  class="mt-1 text-red-600 text-sm"
-                >
-                  <small *ngIf="frmMedico.get('txtLicenciaMedica')?.errors?.['required']">
-                    * Dato obligatorio.
-                  </small>
-                </div>
+                <app-validators [control]="frmMedico.get('txtLicenciaMedica')!"></app-validators>
               </div>
 
               <!-- Consultorio -->

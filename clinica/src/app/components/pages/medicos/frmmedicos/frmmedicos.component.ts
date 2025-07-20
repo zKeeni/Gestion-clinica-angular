@@ -21,10 +21,11 @@ import { especialidadesService } from '../../../../servicios/especialidades.serv
 import { MedicoEspecialidadService } from '../../../../servicios/medicoespecialidad.service';
 import { InMedicoEspecialidad } from '../../../../modelos/modeloEspecialidades/InMedicoEspecialidad';
 import { AlertService } from '../../../../servicios/Alertas/alertas.service';
+import { ValidatorsComponent } from '../../../shared/validators/validators.component';
 
 @Component({
     selector: 'app-frmmedicos',
-    imports: [ReactiveFormsModule, RouterModule, CommonModule],
+    imports: [ReactiveFormsModule, RouterModule, CommonModule, ValidatorsComponent],
     templateUrl: './frmmedicos.component.html',
     styleUrl: './frmmedicos.component.css'
 })
@@ -58,11 +59,11 @@ export class FrmmedicosComponent {
     private route: ActivatedRoute
   ) {
     this.frmMedico = this.formBuilder.group({
-      txtCedula: ['', Validators.required],
+      txtCedula: ['', [Validators.required, ValidatorsComponent.numericTenDigits]],
       txtNombres: ['', Validators.required],
       txtApellidos: ['', Validators.required],
       txtFechNac: ['', Validators.required],
-      txtNumTelefono: ['', Validators.required],
+      txtNumTelefono: ['', [Validators.required, ValidatorsComponent.numericTenDigits]],
       txtCorreo: ['', [Validators.required, Validators.email]],
       txtDireccion: ['', Validators.required],
       txtLicenciaMedica: ['', Validators.required],
