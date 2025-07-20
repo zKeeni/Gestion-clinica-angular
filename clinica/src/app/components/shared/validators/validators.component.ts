@@ -10,6 +10,8 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
 })
 export class ValidatorsComponent {
   @Input() control!: AbstractControl;
+  @Input() showCounter: boolean = false;
+  @Input() expectedLength: number = 10;
 
   /**
    * Validador personalizado para campos numéricos de 10 dígitos
@@ -70,5 +72,38 @@ export class ValidatorsComponent {
     }
     
     return null;
+  }
+
+  /**
+   * Obtiene la longitud actual del campo
+   */
+  getCurrentLength(): number {
+    return this.control?.value?.length || 0;
+  }
+
+  /**
+   * Verifica si debe mostrar el contador
+   */
+  shouldShowCounter(): boolean {
+    return this.showCounter && 
+           this.control?.value?.length > 0 && 
+           this.getCurrentLength() < this.expectedLength &&
+           !this.control?.errors?.['onlyNumbers'];
+  }
+
+  /**
+   * Verifica si el campo está completo y válido
+   */
+  isFieldComplete(): boolean {
+    return this.showCounter &&
+           this.getCurrentLength() === this.expectedLength && 
+           this.control?.valid;
+  }
+
+  /**
+   * Calcula dígitos faltantes
+   */
+  getMissingDigits(): number {
+    return this.expectedLength - this.getCurrentLength();
   }
 }

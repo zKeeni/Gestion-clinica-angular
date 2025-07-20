@@ -21,13 +21,27 @@
       Valor no válido, ingrese solo números.
     </span>
     <span *ngIf="control.errors?.['tenDigits']">
-      Debe contener exactamente 10 dígitos.
+      Debe contener exactamente 10 dígitos 
+      <span *ngIf="showCounter" class="font-semibold">({{ getCurrentLength() }}/10)</span>
     </span>
     <span *ngIf="control.errors?.['exactLength']">
-      Debe contener exactamente {{ control.errors?.['exactLength']?.requiredLength }} dígitos.
+      Debe contener exactamente {{ control.errors?.['exactLength']?.requiredLength }} dígitos
+      <span *ngIf="showCounter" class="font-semibold">({{ getCurrentLength() }}/{{ control.errors?.['exactLength']?.requiredLength }})</span>
     </span>
     <span *ngIf="control.errors?.['pattern']">
       Formato inválido.
     </span>
+  </span>
+</div>
+
+<!-- Confirmación de campo completado -->
+<div
+  *ngIf="isFieldComplete()"
+  class="mt-2 flex items-center gap-2 p-2 bg-green-50 rounded-lg"
+>
+  <i class="fas fa-check-circle text-green-500 text-sm"></i>
+  <span class="text-green-700 text-sm font-medium">
+    Campo completado correctamente 
+    <span class="font-semibold">({{ expectedLength }}/{{ expectedLength }} dígitos)</span>
   </span>
 </div>
