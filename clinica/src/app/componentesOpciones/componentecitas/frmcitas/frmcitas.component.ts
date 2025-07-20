@@ -70,7 +70,8 @@ export class FrmcitasComponent {
   ) {
     this.formCita = this.formBuilder.group({
       txtCedulaPaci: ['',Validators.required],
-      txtNomPaci: [{ value: '', disabled: true }],
+      txtNombrePaci: [{ value: '', disabled: true }],
+      txtApellidoPaci: [{ value: '', disabled: true }],
       txtEdadPaci: [{ value: '', disabled: true }],
       txtAntecedente: [{ value: '', disabled: false }],
       selectEspecialidad: ['',Validators.required],
@@ -156,7 +157,8 @@ export class FrmcitasComponent {
         this.codigoPacienteCita = parseInt(this.objpaciente.codigo);
 
         this.formCita.patchValue({
-          txtNomPaci: this.objpaciente.nombre + ' ' + this.objpaciente.apellido,
+          txtNombrePaci: this.objpaciente.nombre,
+          txtApellidoPaci: this.objpaciente.apellido,
           txtEdadPaci: this.objpaciente.edad,
         });
       },
