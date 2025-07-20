@@ -1,10 +1,13 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
+  AbstractControl,
   ControlEvent,
   FormBuilder,
   FormControlName,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -14,10 +17,11 @@ import { PacientesService } from '../../../../servicios/pacientes.service';
 import { CommonModule } from '@angular/common';
 import { AlertService } from '../../../../servicios/Alertas/alertas.service';
 import Swal from 'sweetalert2';
+import { ValidatorsComponent } from '../../../shared/validators/validators.component';
 
 @Component({
   selector: 'app-frmpacientes',
-  imports: [ReactiveFormsModule, RouterModule, CommonModule],
+  imports: [ReactiveFormsModule, RouterModule, CommonModule, ValidatorsComponent],
   templateUrl: './frmpacientes.component.html',
   styleUrl: './frmpacientes.component.css',
 })
@@ -37,11 +41,11 @@ export class FrmpacientesComponent {
     private route: ActivatedRoute
   ) {
     this.frmPaciente = this.formBuilder.group({
-      txtCedula: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      txtCedula: ['', [Validators.required, ValidatorsComponent.numericTenDigits]],
       txtNombres: ['', Validators.required],
       txtApellidos: ['', Validators.required],
       txtFechNac: ['', Validators.required],
-      txtNumTelefono: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      txtNumTelefono: ['', [Validators.required, ValidatorsComponent.numericTenDigits]],
       txtCorreo: ['', [Validators.required, Validators.email]],
       txtDireccion: ['', Validators.required],
       txtDetalles: [''],

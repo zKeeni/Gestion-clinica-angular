@@ -36,41 +36,7 @@
                 type="text"
                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
               />
-              <!-- Error de validación -->
-              <div
-                *ngIf="frmPaciente.get('txtCedula')?.invalid && frmPaciente.get('txtCedula')?.touched"
-                class="mt-2 flex items-center gap-2 p-2 bg-red-50 rounded-lg"
-              >
-                <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
-                <span class="text-red-700 text-sm">
-                  <span *ngIf="frmPaciente.get('txtCedula')?.errors?.['required']">
-                    La cédula es obligatoria
-                  </span>
-                  <span *ngIf="frmPaciente.get('txtCedula')?.errors?.['pattern']">
-                    La cédula debe contener exactamente 10 dígitos numéricos
-                  </span>
-                </span>
-              </div>
-              <!-- Contador de dígitos -->
-              <div
-                *ngIf="frmPaciente.get('txtCedula')?.value?.length > 0 && frmPaciente.get('txtCedula')?.value?.length < 10 && !frmPaciente.get('txtCedula')?.errors?.['pattern']"
-                class="mt-2 flex items-center gap-2 p-2 bg-orange-50 rounded-lg"
-              >
-                <i class="fas fa-info-circle text-orange-500 text-sm"></i>
-                <span class="text-orange-700 text-sm">
-                  Faltan {{ 10 - frmPaciente.get('txtCedula')?.value?.length }} dígitos para completar la cédula ({{ frmPaciente.get('txtCedula')?.value?.length }}/10)
-                </span>
-              </div>
-              <!-- Confirmación de cédula completada -->
-              <div
-                *ngIf="frmPaciente.get('txtCedula')?.value?.length === 10 && frmPaciente.get('txtCedula')?.valid"
-                class="mt-2 flex items-center gap-2 p-2 bg-green-50 rounded-lg"
-              >
-                <i class="fas fa-check-circle text-green-500 text-sm"></i>
-                <span class="text-green-700 text-sm">
-                  Cédula completada correctamente (10/10 dígitos)
-                </span>
-              </div>
+              <app-validators [control]="frmPaciente.get('txtCedula')!"></app-validators>
             </div>
 
             <!-- Nombres -->
@@ -85,13 +51,7 @@
                 type="text"
                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
               />
-              <div
-                *ngIf="frmPaciente.get('txtNombres')?.invalid && frmPaciente.get('txtNombres')?.touched"
-                class="mt-2 flex items-center gap-2 p-2 bg-red-50 rounded-lg"
-              >
-                <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
-                <span class="text-red-700 text-sm">Los nombres son obligatorios</span>
-              </div>
+              <app-validators [control]="frmPaciente.get('txtNombres')!"></app-validators>
             </div>
 
             <!-- Apellidos -->
@@ -106,13 +66,7 @@
                 type="text"
                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
               />
-              <div
-                *ngIf="frmPaciente.get('txtApellidos')?.invalid && frmPaciente.get('txtApellidos')?.touched"
-                class="mt-2 flex items-center gap-2 p-2 bg-red-50 rounded-lg"
-              >
-                <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
-                <span class="text-red-700 text-sm">Los apellidos son obligatorios</span>
-              </div>
+              <app-validators [control]="frmPaciente.get('txtApellidos')!"></app-validators>
             </div>
 
             <!-- Fecha de Nacimiento -->
@@ -126,13 +80,7 @@
                 type="date"
                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
               />
-              <div
-                *ngIf="frmPaciente.get('txtFechNac')?.invalid && frmPaciente.get('txtFechNac')?.touched"
-                class="mt-2 flex items-center gap-2 p-2 bg-red-50 rounded-lg"
-              >
-                <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
-                <span class="text-red-700 text-sm">La fecha de nacimiento es obligatoria</span>
-              </div>
+              <app-validators [control]="frmPaciente.get('txtFechNac')!"></app-validators>
             </div>
 
             <!-- Teléfono -->
@@ -148,41 +96,7 @@
                 type="text"
                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
               />
-              <!-- Error de validación -->
-              <div
-                *ngIf="frmPaciente.get('txtNumTelefono')?.invalid && frmPaciente.get('txtNumTelefono')?.touched"
-                class="mt-2 flex items-center gap-2 p-2 bg-red-50 rounded-lg"
-              >
-                <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
-                <span class="text-red-700 text-sm">
-                  <span *ngIf="frmPaciente.get('txtNumTelefono')?.errors?.['required']">
-                    El número de teléfono es obligatorio
-                  </span>
-                  <span *ngIf="frmPaciente.get('txtNumTelefono')?.errors?.['pattern']">
-                    El teléfono debe contener exactamente 10 dígitos numéricos
-                  </span>
-                </span>
-              </div>
-              <!-- Contador de dígitos -->
-              <div
-                *ngIf="frmPaciente.get('txtNumTelefono')?.value?.length > 0 && frmPaciente.get('txtNumTelefono')?.value?.length < 10 && !frmPaciente.get('txtNumTelefono')?.errors?.['pattern']"
-                class="mt-2 flex items-center gap-2 p-2 bg-orange-50 rounded-lg"
-              >
-                <i class="fas fa-info-circle text-orange-500 text-sm"></i>
-                <span class="text-orange-700 text-sm">
-                  Faltan {{ 10 - frmPaciente.get('txtNumTelefono')?.value?.length }} dígitos para completar el teléfono ({{ frmPaciente.get('txtNumTelefono')?.value?.length }}/10)
-                </span>
-              </div>
-              <!-- Confirmación de teléfono completado -->
-              <div
-                *ngIf="frmPaciente.get('txtNumTelefono')?.value?.length === 10 && frmPaciente.get('txtNumTelefono')?.valid"
-                class="mt-2 flex items-center gap-2 p-2 bg-green-50 rounded-lg"
-              >
-                <i class="fas fa-check-circle text-green-500 text-sm"></i>
-                <span class="text-green-700 text-sm">
-                  Teléfono completado correctamente (10/10 dígitos)
-                </span>
-              </div>
+              <app-validators [control]="frmPaciente.get('txtNumTelefono')!"></app-validators>
             </div>
 
             <!-- Email -->
@@ -197,31 +111,7 @@
                 type="email"
                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm"
               />
-              <!-- Error de validación de email -->
-              <div
-                *ngIf="frmPaciente.get('txtCorreo')?.invalid && frmPaciente.get('txtCorreo')?.touched"
-                class="mt-2 flex items-center gap-2 p-2 bg-red-50 rounded-lg"
-              >
-                <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
-                <span class="text-red-700 text-sm">
-                  <span *ngIf="frmPaciente.get('txtCorreo')?.errors?.['email']">
-                    El formato del correo electrónico no es válido
-                  </span>
-                  <span *ngIf="frmPaciente.get('txtCorreo')?.errors?.['required']">
-                    El correo electrónico es obligatorio
-                  </span>
-                </span>
-              </div>
-              <!-- Indicador de formato válido -->
-              <div
-                *ngIf="frmPaciente.get('txtCorreo')?.value?.length > 0 && frmPaciente.get('txtCorreo')?.valid"
-                class="mt-2 flex items-center gap-2 p-2 bg-green-50 rounded-lg"
-              >
-                <i class="fas fa-check-circle text-green-500 text-sm"></i>
-                <span class="text-green-700 text-sm">
-                  Formato de correo electrónico válido
-                </span>
-              </div>
+              <app-validators [control]="frmPaciente.get('txtCorreo')!"></app-validators>
             </div>
 
             <!-- Dirección -->
@@ -236,13 +126,7 @@
                 rows="3"
                 class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all duration-200 hover:bg-white hover:shadow-sm resize-vertical"
               ></textarea>
-              <div
-                *ngIf="frmPaciente.get('txtDireccion')?.invalid && frmPaciente.get('txtDireccion')?.touched"
-                class="mt-2 flex items-center gap-2 p-2 bg-red-50 rounded-lg"
-              >
-                <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
-                <span class="text-red-700 text-sm">La dirección es obligatoria</span>
-              </div>
+              <app-validators [control]="frmPaciente.get('txtDireccion')!"></app-validators>
             </div>
 
             <!-- Descripción/Detalles -->
