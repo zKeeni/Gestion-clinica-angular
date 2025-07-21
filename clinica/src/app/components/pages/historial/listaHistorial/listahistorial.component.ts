@@ -23,10 +23,12 @@ import {
 import { NgModule } from '@angular/core';
 import { AuthService } from '../../../../servicios/authservicio.service';
 import { DirectivasModule } from '../../../../directivas/directivas.module';
+import { ValidatorsComponent } from '../../../shared/validators/validators.component';
+import { Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-listahistorial',
-    imports: [RouterModule, ReactiveFormsModule, CommonModule, DirectivasModule],
+    imports: [RouterModule, ReactiveFormsModule, CommonModule, DirectivasModule, ValidatorsComponent],
     templateUrl: './listahistorial.component.html',
     styleUrl: './listahistorial.component.css'
 })
@@ -54,12 +56,11 @@ export class listaHistorialComponent {
     private ServicioAlertas: AlertService
   ) {
     this.formListarConsulta = this.formBuilder.group({
-      txtCedulaPaciente: [''],
+      txtCedulaPaciente: ['', ValidatorsComponent.numericTenDigits],
       checkCanlendario: [false], // Checkbox desmarcado por defecto
       txtFechaInicio: [{ value: '', disabled: true }],
       txtFechaFin: [{ value: '', disabled: true }],
-
-      selectMedico: [],
+      selectMedico: ['', ValidatorsComponent.selectRequired],
       end: [''],
     });
 
@@ -94,23 +95,112 @@ export class listaHistorialComponent {
   }
 
   listarHistorialFilto() {
-    this.txtCedula = this.formListarConsulta.value.txtCedulaPaciente || null;
-    if(this.authService.obtenerRol()=='administrador'){
-      this.codigoMedico = this.formListarConsulta.value.selectMedico || null;
+    // Validar que al menos un campo de búsqueda esté lleno
+    const cedulaPaciente = this.formListarConsulta.value.txtCedulaPaciente?.trim();
+    const selectMedico = this.formListarConsulta.value.selectMedico;
+    const fechaInicio = this.formListarConsulta.value.txtFechaInicio;
+    const fechaFin = this.formListarConsulta.value.txtFechaFin;
+    const isCheckCalendario = this.formListarConsulta.value.checkCanlendario;
 
+    // Validación específica para cédula incompleta
+    if (cedulaPaciente && cedulaPaciente.length > 0 && cedulaPaciente.length < 10) {
+      this.ServicioAlertas.error(
+        'Cédula incompleta',
+        `La cédula debe tener exactamente 10 dígitos. Actualmente tiene ${cedulaPaciente.length} dígitos.`
+      );
+      this.marcarCamposComoTocados();
+      return;
     }
 
-    console.log(this.codigoMedico)
-    this.txtFechaFin = this.formListarConsulta.value.txtFechaFin || null;
-    this.txtFechaInicio = this.formListarConsulta.value.txtFechaInicio || null;
+    // Verificar si al menos un filtro está activo
+    const tieneAlgunFiltro = cedulaPaciente || 
+                            (this.authService.obtenerRol() === 'administrador' && selectMedico) ||
+                            (isCheckCalendario && (fechaInicio || fechaFin));
 
-    console.log(this.formListarConsulta.value.end);
+    if (!tieneAlgunFiltro) {
+      this.ServicioAlertas.info(
+        'Filtros requeridos',
+        'Debe especificar al menos un criterio de búsqueda: cédula del paciente, médico (administradores) o rango de fechas.'
+      );
+      this.marcarCamposComoTocados();
+      return;
+    }
+
+    // Validar campos específicos con errores
+    if (cedulaPaciente && this.formListarConsulta.get('txtCedulaPaciente')?.invalid) {
+      this.ServicioAlertas.error(
+        'Cédula inválida',
+        'La cédula debe contener exactamente 10 dígitos numéricos.'
+      );
+      this.marcarCamposComoTocados();
+      return;
+    }
+
+    // Validar médico para administradores
+    if (this.authService.obtenerRol() === 'administrador' && 
+        selectMedico && this.formListarConsulta.get('selectMedico')?.invalid) {
+      this.ServicioAlertas.error(
+        'Médico requerido',
+        'Debe seleccionar un médico válido.'
+      );
+      this.marcarCamposComoTocados();
+      return;
+    }
+
+    // Validar rango de fechas si está habilitado
+    if (isCheckCalendario) {
+      if (!fechaInicio && !fechaFin) {
+        this.ServicioAlertas.info(
+          'Fechas requeridas',
+          'Debe especificar al menos una fecha (inicio o fin) cuando el filtro por fecha está activo.'
+        );
+        return;
+      }
+
+      if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
+        this.ServicioAlertas.error(
+          'Rango de fechas inválido',
+          'La fecha de inicio no puede ser posterior a la fecha fin.'
+        );
+        return;
+      }
+    }
+
+    // Si todas las validaciones pasan, proceder con la búsqueda
+    this.txtCedula = cedulaPaciente || null;
+    
+    if (this.authService.obtenerRol() === 'administrador') {
+      this.codigoMedico = selectMedico || null;
+    }
+
+    this.txtFechaFin = fechaFin || null;
+    this.txtFechaInicio = fechaInicio || null;
+
+    console.log('Búsqueda con parámetros:', {
+      cedula: this.txtCedula,
+      medico: this.codigoMedico,
+      fechaInicio: this.txtFechaInicio,
+      fechaFin: this.txtFechaFin
+    });
+
     this.listarHistorial(
       this.txtCedula,
       this.codigoMedico,
       this.txtFechaInicio,
       this.txtFechaFin
     );
+  }
+
+  /**
+   * Marca todos los campos del formulario como tocados para mostrar errores de validación
+   */
+  marcarCamposComoTocados(): void {
+    Object.keys(this.formListarConsulta.controls).forEach((campo) => {
+      const control = this.formListarConsulta.get(campo);
+      if (control) {
+        control.markAsTouched();
+      }
+    });
   }
 
   listarHistorial(

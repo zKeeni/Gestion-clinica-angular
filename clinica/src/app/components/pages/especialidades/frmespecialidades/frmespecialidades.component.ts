@@ -12,10 +12,11 @@ import { especialidadesService } from '../../../../servicios/especialidades.serv
 import { InEspecialidades } from '../../../../modelos/modeloEspecialidades/InEspecialidades';
 import { AlertService } from '../../../../servicios/Alertas/alertas.service';
 import { CommonModule } from '@angular/common';
+import { ValidatorsComponent } from '../../../shared/validators/validators.component';
 
 @Component({
     selector: 'app-frmespecialidades',
-    imports: [ReactiveFormsModule, RouterModule, CommonModule],
+    imports: [ReactiveFormsModule, RouterModule, CommonModule, ValidatorsComponent],
     templateUrl: './frmespecialidades.component.html',
     styleUrl: './frmespecialidades.component.css'
 })
@@ -128,6 +129,17 @@ export class FrmespecialidadsComponent {
       const control = this.frmEspecialidad.get(campo);
       if (control) {
         control.markAsTouched();
+      }
+    });
+  }
+
+  salirSinGuardar(): void {
+    this.alertaServ.confirm(
+      '¿Está seguro?',
+      'Se perderán todos los cambios no guardados'
+    ).then((result: any) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['home/listaespecialidades']);
       }
     });
   }
