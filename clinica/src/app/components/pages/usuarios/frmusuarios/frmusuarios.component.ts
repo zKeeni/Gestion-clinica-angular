@@ -10,11 +10,12 @@ import { MedicosService } from '../../../../servicios/medicos.service';
 import { RolesService } from '../../../../servicios/roles.service';
 import { InMedico } from '../../../../modelos/modelMedicos/InMedico';
 import { InRoles } from '../../../../modelos/modeloRoles/InRoles';
+import { ValidatorsComponent } from '../../../shared/validators/validators.component';
 import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-frmusuarios',
-    imports: [ReactiveFormsModule, RouterModule, CommonModule],
+    imports: [ReactiveFormsModule, RouterModule, CommonModule, ValidatorsComponent],
     templateUrl: './frmusuarios.component.html',
     styleUrl: './frmusuarios.component.css'
 })
@@ -49,7 +50,6 @@ export class FrmusuariosComponent {
         txtCorreoRecuperacion: ['',Validators.required,Validators.email],
         cbxMedicos: ['', Validators.required],
         cbxRoles: ['', Validators.required]
-
       });
     }
     ngOnInit(): void {
@@ -100,14 +100,25 @@ export class FrmusuariosComponent {
 
     onRoleChange(event: any): void {
       const selectedRoleId = parseInt(event.target.value, 10); 
-      console.log(selectedRoleId);
+      console.log('ID del rol seleccionado:', selectedRoleId);
   
       this.rolServ.LRolesId(selectedRoleId).subscribe({
         next: (selectedRole) => {
           if (selectedRole) {
             console.log('Rol seleccionado:', selectedRole.nombre, selectedRole.codigo);
       
-            this.isMedicoSelected = selectedRole.nombre.toLowerCase() === 'medico'; 
+            this.isMedicoSelected = selectedRole.nombre.toLowerCase() === 'medico';
+            
+            // Actualizar validaciones dinámicamente
+            const medicoControl = this.frmUsuario.get('cbxMedicos');
+            if (this.isMedicoSelected) {
+              medicoControl?.setValidators([Validators.required]);
+              medicoControl?.updateValueAndValidity();
+            } else {
+              medicoControl?.clearValidators();
+              medicoControl?.setValue('');
+              medicoControl?.updateValueAndValidity();
+            }
           } else {
             this.isMedicoSelected = false; 
           }
@@ -143,6 +154,38 @@ export class FrmusuariosComponent {
     }
   
     guardarUsuario(): void {
+      // Primero marcar todos los campos como tocados para mostrar errores
+      this.marcarCamposComoTocados();
+
+      // Verificar si el formulario tiene errores (campos obligatorios)
+      if (this.frmUsuario.invalid) {
+        // Verificar qué campos específicos tienen errores
+        const camposConError = [];
+        
+        if (this.frmUsuario.get('txtNombreUsuario')?.invalid) {
+          camposConError.push('Nombre de Usuario');
+        }
+        if (this.frmUsuario.get('txtContrasenia')?.invalid) {
+          camposConError.push('Contraseña');
+        }
+        if (this.frmUsuario.get('cbxRoles')?.invalid) {
+          camposConError.push('Rol del Sistema');
+        }
+        if (this.isMedicoSelected && this.frmUsuario.get('cbxMedicos')?.invalid) {
+          camposConError.push('Médico Asignado');
+        }
+
+        if (camposConError.length > 0) {
+          Swal.fire({
+            title: 'Campos Requeridos',
+            text: 'Ingrese correctamente los valores. Complete los siguientes campos: ' + camposConError.join(', '),
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Entendido'
+          });
+        }
+        return;
+      }
       const usuario: InUsuario = {
         nombre_usuario: this.frmUsuario.value.txtNombreUsuario,
         contrasenia: this.frmUsuario.value.txtContrasenia,

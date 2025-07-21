@@ -12,10 +12,12 @@ import { ConsultoriosService } from '../../../../servicios/consultorios.service'
 import { InConsultorios } from '../../../../modelos/modelConsultorios/InConsultorios';
 import { AlertService } from '../../../../servicios/Alertas/alertas.service';
 import { CommonModule } from '@angular/common';
+import { ValidatorsComponent } from '../../../shared/validators/validators.component';
+import Swal from 'sweetalert2';
 
 @Component({
     selector: 'app-frmconsultorios',
-    imports: [ReactiveFormsModule, RouterModule, CommonModule],
+    imports: [ReactiveFormsModule, RouterModule, CommonModule, ValidatorsComponent],
     templateUrl: './frmconsultorios.component.html',
     styleUrl: './frmconsultorios.component.css'
 })
@@ -77,12 +79,32 @@ export class FrmconsultoriosComponent {
   
 
   guardarconsultorio(): void {
+    // Primero marcar todos los campos como tocados para mostrar errores
+    this.marcarCamposComoTocados();
+
+    // Verificar si el formulario tiene errores (campos obligatorios)
     if (this.frmConsultorio.invalid) {
-      this.alertaServ.info(
-        '',
-        'Por favor, complete todos los campos obligatorios *'
-      );
-      this.marcarCamposComoTocados();
+      // Verificar qué campos específicos tienen errores
+      const camposConError = [];
+      
+      if (this.frmConsultorio.get('txtNombre')?.invalid) {
+        camposConError.push('Nombre del Consultorio');
+      }
+
+      if (camposConError.length > 0) {
+        Swal.fire({
+          title: 'Campos Requeridos',
+          text: 'Ingrese correctamente los valores. Complete los siguientes campos: ' + camposConError.join(', '),
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido'
+        });
+      } else {
+        this.alertaServ.info(
+          '',
+          'Por favor, complete todos los campos obligatorios *'
+        );
+      }
       return;
     }
 
@@ -129,6 +151,23 @@ export class FrmconsultoriosComponent {
       const control = this.frmConsultorio.get(campo);
       if (control) {
         control.markAsTouched();
+      }
+    });
+  }
+
+  salirSinGuardar(): void {
+    Swal.fire({
+      title: '¿Está seguro que desea salir?',
+      text: 'Los cambios no guardados se perderán.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, salir',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['/home/listaconsultorios']);
       }
     });
   }

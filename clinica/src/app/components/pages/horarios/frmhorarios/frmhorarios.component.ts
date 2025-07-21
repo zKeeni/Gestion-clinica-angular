@@ -5,6 +5,9 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -12,12 +15,13 @@ import { horariosService } from '../../../../servicios/horarios.service';
 import { InHorarios } from '../../../../modelos/modeloHorarios/InHorarios';
 import { AlertService } from '../../../../servicios/Alertas/alertas.service';
 import { CommonModule } from '@angular/common';
+import { ValidatorsComponent } from '../../../shared/validators/validators.component';
 import Swal from 'sweetalert2';
 
 
 @Component({
     selector: 'app-frmhorarios',
-    imports: [ReactiveFormsModule, RouterModule, CommonModule],
+    imports: [ReactiveFormsModule, RouterModule, CommonModule, ValidatorsComponent],
     templateUrl: './frmhorarios.component.html',
     styleUrl: './frmhorarios.component.css'
 })
@@ -41,7 +45,33 @@ export class FrmhorariosComponent {
     this.frmHorarios = this.formBuilder.group({
       txtHoraInicio: ['', Validators.required],
       txtHoraFin: ['', Validators.required],
-    });
+    }, { validators: this.timeRangeValidator });
+  }
+
+  // Validador personalizado para verificar que hora inicio < hora fin
+  timeRangeValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
+    const horaInicio = group.get('txtHoraInicio')?.value;
+    const horaFin = group.get('txtHoraFin')?.value;
+
+    if (!horaInicio || !horaFin) {
+      return null; // Si algún campo está vacío, no validamos
+    }
+
+    // Convertir las horas a minutos para comparar
+    const minutosInicio = this.convertirHoraAMinutos(horaInicio);
+    const minutosFin = this.convertirHoraAMinutos(horaFin);
+
+    if (minutosInicio >= minutosFin) {
+      return { timeRangeInvalid: true };
+    }
+
+    return null;
+  }
+
+  // Función auxiliar para convertir hora (HH:MM) a minutos
+  private convertirHoraAMinutos(hora: string): number {
+    const [horas, minutos] = hora.split(':').map(Number);
+    return horas * 60 + minutos;
   }
   ngOnInit(): void {
     this.route.paramMap.subscribe((parametros) => {
@@ -78,12 +108,47 @@ export class FrmhorariosComponent {
   
 
   guardarhorario(): void {
+    // Primero marcar todos los campos como tocados para mostrar errores
+    this.marcarCamposComoTocados();
+
+    // Verificar si hay errores de validación específicos
+    if (this.frmHorarios.errors?.['timeRangeInvalid']) {
+      Swal.fire({
+        title: 'Error de Validación',
+        text: 'Ingrese correctamente los valores. La hora de inicio debe ser anterior a la hora de fin.',
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+
+    // Verificar si el formulario tiene otros errores (campos obligatorios)
     if (this.frmHorarios.invalid) {
-      this.alertaServ.info(
-        '',
-        'Por favor, complete todos los campos obligatorios *'
-      );
-      this.marcarCamposComoTocados();
+      // Verificar qué campos específicos tienen errores
+      const camposConError = [];
+      
+      if (this.frmHorarios.get('txtHoraInicio')?.invalid) {
+        camposConError.push('Hora de Inicio');
+      }
+      if (this.frmHorarios.get('txtHoraFin')?.invalid) {
+        camposConError.push('Hora de Fin');
+      }
+
+      if (camposConError.length > 0) {
+        Swal.fire({
+          title: 'Campos Requeridos',
+          text: 'Ingrese correctamente los valores. Complete los siguientes campos: ' + camposConError.join(', '),
+          icon: 'warning',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido'
+        });
+      } else {
+        this.alertaServ.info(
+          '',
+          'Por favor, complete todos los campos obligatorios *'
+        );
+      }
       return;
     }
 
