@@ -147,10 +147,9 @@ export class listaConsultasComponent {
     if (this.filtros.hora) {
       console.log('Filtro hora seleccionada:', this.filtros.hora);
       resultadoFiltrado = resultadoFiltrado.filter(cita => {
-        // Convertir la hora del filtro (formato 24h) al formato de la BD (12h con AM/PM)
-        const horaBusqueda = this.convertirHoraParaBusqueda(this.filtros.hora);
-        console.log('Buscando hora:', horaBusqueda, 'en:', cita.hora_cita);
-        return cita.hora_cita === horaBusqueda;
+        console.log('Comparando hora:', this.filtros.hora, 'con:', cita.hora_cita);
+        // Ahora el select ya entrega el formato correcto (AM/PM), comparación directa
+        return cita.hora_cita === this.filtros.hora;
       });
     }
 
@@ -174,30 +173,6 @@ export class listaConsultasComponent {
     
     // Formato: "21 de Julio de 2025"
     return `${numeroDia} de ${nombreMes} de ${year}`;
-  }
-
-  // Método para convertir hora de 24h a 12h con AM/PM
-  convertirHoraParaBusqueda(hora: string): string {
-    if (!hora) return '';
-    
-    const [horas, minutos] = hora.split(':');
-    let horaNum = parseInt(horas);
-    const min = minutos;
-    
-    let periodo = 'AM';
-    
-    if (horaNum === 0) {
-      horaNum = 12;
-    } else if (horaNum === 12) {
-      periodo = 'PM';
-    } else if (horaNum > 12) {
-      horaNum = horaNum - 12;
-      periodo = 'PM';
-    }
-    
-    // Formato: "07:00 PM"
-    const horaFormateada = horaNum.toString().padStart(2, '0');
-    return `${horaFormateada}:${min} ${periodo}`;
   }
 
   // Método para limpiar todos los filtros
