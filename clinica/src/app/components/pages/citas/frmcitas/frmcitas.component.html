@@ -51,27 +51,12 @@
             </button>
           </div>
 
-            <div
-              *ngIf="
-              formCita.get('txtCedulaPaci')?.invalid &&
-              formCita.get('txtCedulaPaci')?.touched
-              "
-              class="mb-4 flex items-center gap-2 p-3 bg-red-50 rounded-lg shadow-sm"
-            >
-              <i class="fas fa-exclamation-circle text-red-500 text-lg"></i>
-              <span
-              *ngIf="formCita.get('txtCedulaPaci')?.errors?.['required']"
-              class="text-red-700 text-sm font-semibold"
-              >
-              El número de cédula es obligatorio.
-              </span>
-              <span
-              *ngIf="formCita.get('txtCedulaPaci')?.value?.length > 0 && formCita.get('txtCedulaPaci')?.value?.length < 10"
-              class="text-red-700 text-sm font-semibold"
-              >
-              Faltan {{ 10 - formCita.get('txtCedulaPaci')?.value?.length }} dígitos para completar la cédula.
-              </span>
-            </div>
+          <!-- Componente de validación reutilizable -->
+          <app-validators 
+            [control]="formCita.get('txtCedulaPaci')!" 
+            [showCounter]="true"
+            [expectedLength]="10">
+          </app-validators>
         </div>
 
         <!-- Tarjeta: Datos del Paciente -->

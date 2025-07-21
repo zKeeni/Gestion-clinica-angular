@@ -25,6 +25,7 @@ import { InCitasVista } from '../../../../modelos/modeloCitas/InCitasVista';
 import { InCitas } from '../../../../modelos/modeloCitas/InCitas';
 import { citasService } from '../../../../servicios/citas.service';
 import { AlertService } from '../../../../servicios/Alertas/alertas.service';
+import { ValidatorsComponent } from '../../../shared/validators/validators.component';
 
 @Component({
     selector: 'app-frmcitas',
@@ -33,6 +34,7 @@ import { AlertService } from '../../../../servicios/Alertas/alertas.service';
         ReactiveFormsModule,
         RouterModule,
         FullCalendarModule,
+        ValidatorsComponent,
     ],
     templateUrl: './frmcitas.component.html',
     styleUrl: './frmcitas.component.css'
@@ -69,7 +71,7 @@ export class FrmcitasComponent {
     private alertaServ: AlertService
   ) {
     this.formCita = this.formBuilder.group({
-      txtCedulaPaci: ['',Validators.required],
+      txtCedulaPaci: ['', [Validators.required, ValidatorsComponent.numericTenDigits]],
       txtNombrePaci: [{ value: '', disabled: true }],
       txtApellidoPaci: [{ value: '', disabled: true }],
       txtEdadPaci: [{ value: '', disabled: true }],
@@ -153,6 +155,12 @@ export class FrmcitasComponent {
 
   buscarPacienteCedula() {
     const cedula = this.formCita.get('txtCedulaPaci')?.value;
+    const cedulaControl = this.formCita.get('txtCedulaPaci');
+
+    // Limpiar errores personalizados previos
+    if (cedulaControl?.hasError('pacienteNoEncontrado')) {
+      cedulaControl.setErrors(null);
+    }
 
     this.serviPacientes.LPacientesCedulaEstado(cedula, true).subscribe({
       next: (res) => {
@@ -164,9 +172,33 @@ export class FrmcitasComponent {
           txtApellidoPaci: this.objpaciente.apellido,
           txtEdadPaci: this.objpaciente.edad,
         });
+        
+        // Limpiar cualquier error previo si se encuentra el paciente
+        if (cedulaControl?.hasError('pacienteNoEncontrado')) {
+          const errors = { ...cedulaControl.errors };
+          delete errors['pacienteNoEncontrado'];
+          cedulaControl.setErrors(Object.keys(errors).length > 0 ? errors : null);
+        }
       },
       error: (err) => {
-        console.log(err);
+        console.log('Error al buscar paciente:', err);
+        
+        // Agregar error personalizado al control
+        const currentErrors = cedulaControl?.errors || {};
+        cedulaControl?.setErrors({
+          ...currentErrors,
+          pacienteNoEncontrado: true
+        });
+        
+        // Limpiar datos del paciente
+        this.objpaciente = undefined;
+        this.codigoPacienteCita = 0;
+        
+        this.formCita.patchValue({
+          txtNombrePaci: '',
+          txtApellidoPaci: '',
+          txtEdadPaci: '',
+        });
       },
     });
   }
@@ -371,6 +403,9 @@ export class FrmcitasComponent {
   limpiarFormularioYCalendario(): void {
     // Limpiar el formulario reactivo
     this.formCita.reset();
+    
+    // Limpiar errores personalizados del FormControl de cédula
+    this.formCita.get('txtCedulaPaci')?.setErrors(null);
     
     // Limpiar las variables del componente
     this.objpaciente = undefined;
