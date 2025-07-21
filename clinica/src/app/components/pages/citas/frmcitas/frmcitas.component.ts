@@ -109,8 +109,11 @@ export class FrmcitasComponent {
     },
 
     eventClick: (info) => {
-      // Mostrar mensaje o acción personalizada
-      alert('Espacio ocupado');
+      // Mostrar mensaje con el servicio de alertas personalizado
+      this.alertaServ.info(
+        'Espacio ocupado',
+        'Este horario ya tiene una cita programada. Por favor, seleccione otro horario disponible.'
+      );
       console.log('Información del evento:', info.event);
     },
   };
@@ -342,9 +345,9 @@ export class FrmcitasComponent {
       this.serviCitas.CrearCita(cita).subscribe({
         next: (res) => {
           this.alertaServ.success('Cita registrada con éxito.', '');
-          //            this.router.navigate(['home/citas']);
-
-          this.cargarMedicoCitas(this.codigoMedicoCita);
+          
+          // Limpiar el formulario y reiniciar el calendario
+          this.limpiarFormularioYCalendario();
         },
         error: (err) => {
           console.log('Error al crear consultorio:', err);
@@ -363,5 +366,78 @@ export class FrmcitasComponent {
         control.markAsTouched();
       }
     });
+  }
+
+  limpiarFormularioYCalendario(): void {
+    // Limpiar el formulario reactivo
+    this.formCita.reset();
+    
+    // Limpiar las variables del componente
+    this.objpaciente = undefined;
+    this.objhorario = undefined;
+    this.listamedicos = [];
+    this.listaCitasMedicosVista = [];
+    this.cedulaPac = '';
+    
+    this.codigoCita = 0;
+    this.codigoMedicoCita = 0;
+    this.codigoEspecialidad = 0;
+    this.codigoPacienteCita = 0;
+    this.horaCita = '';
+    this.fechaCita = '';
+    this.antecedentesCita = '';
+    this.motivoCita = '';
+    this.eventoUpdate = false;
+    
+    // Limpiar selecciones visuales del calendario
+    const casillasSeleccionadas = document.querySelectorAll('.celda-seleccionada');
+    casillasSeleccionadas.forEach(casilla => {
+      casilla.classList.remove('celda-seleccionada');
+    });
+    
+    // Limpiar estilos de celdas verdes del handleSelect
+    const celdasVerdes = document.querySelectorAll('.fc-timegrid-slot[style*="background-color"]');
+    celdasVerdes.forEach(celda => {
+      (celda as HTMLElement).style.backgroundColor = '';
+    });
+    
+    // Reiniciar completamente el calendario sin eventos
+    this.calendarOptions = {
+      height: 'auto',
+      allDaySlot: false,
+      locale: 'es',
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+      initialView: 'timeGridWeek',
+      weekends: true,
+      dateClick: (arg) => this.manejarFechas(arg),
+      select: this.handleSelect.bind(this),
+      selectable: true,
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      },
+      slotDuration: '01:00:00',
+      validRange: {
+        start: new Date(), // Restringir selecciones a partir de la fecha y hora actual
+      },
+      slotMinTime: this.getSlotMinTime(), // Hora mínima disponible
+      slotMaxTime: '22:00:00', // La última hora disponible es 22:00
+      events: [], // Sin eventos - calendario limpio
+      selectAllow: (selectInfo) => {
+        const now = new Date(); // Hora actual
+        return selectInfo.start >= now; // Permitir solo si la hora seleccionada es futura
+      },
+      eventClick: (info) => {
+        // Mostrar mensaje con el servicio de alertas personalizado
+        this.alertaServ.info(
+          'Espacio ocupado',
+          'Este horario ya tiene una cita programada. Por favor, seleccione otro horario disponible.'
+        );
+        console.log('Información del evento:', info.event);
+      },
+    };
+    
+    console.log('Formulario y calendario limpiados exitosamente');
   }
 }
