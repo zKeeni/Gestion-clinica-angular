@@ -28,7 +28,7 @@ import { Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-listahistorial',
-    imports: [RouterModule, ReactiveFormsModule, CommonModule, DirectivasModule, ValidatorsComponent],
+    imports: [RouterModule, ReactiveFormsModule, CommonModule, DirectivasModule],
     templateUrl: './listahistorial.component.html',
     styleUrl: './listahistorial.component.css'
 })
