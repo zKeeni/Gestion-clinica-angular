@@ -160,7 +160,7 @@
                 background-size: 0.75rem;
               "
             >
-              <option value="" selected="true">
+              <option value="" disabled selected class="text-gray-400">
                 Seleccione una especialidad
               </option>
               <option
@@ -185,7 +185,13 @@
                 name="selectMedico"
                 id="selectMedico"
                 (change)="onSelectChange($event)"
-                class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:bg-white hover:shadow-sm appearance-none cursor-pointer"
+                [disabled]="!formCita.get('selectEspecialidad')?.value || listamedicos.length === 0"
+                [attr.tabindex]="(!formCita.get('selectEspecialidad')?.value || listamedicos.length === 0) ? -1 : 0"
+                class="w-full px-4 py-3 border rounded-lg text-gray-900 focus:outline-none transition-all duration-200 appearance-none"
+                [ngClass]="{
+                  'bg-gray-50 border-gray-300 hover:bg-white hover:shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer': formCita.get('selectEspecialidad')?.value && listamedicos.length > 0,
+                  'bg-gray-100 border-gray-200 cursor-not-allowed text-gray-400 pointer-events-none': !formCita.get('selectEspecialidad')?.value || listamedicos.length === 0
+                }"
                 style="
                   background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;4&quot; height=&quot;5&quot; viewBox=&quot;0 0 4 5&quot;><path fill=&quot;%23666&quot; d=&quot;M2 0L0 2h4zm0 5L0 3h4z&quot;/></svg>');
                   background-repeat: no-repeat;
@@ -193,6 +199,21 @@
                   background-size: 0.75rem;
                 "
               >
+                <!-- Cuando no se ha seleccionado especialidad -->
+                <option value="" disabled selected *ngIf="!formCita.get('selectEspecialidad')?.value" class="text-gray-400">
+                  Primero seleccione una especialidad
+                </option>
+                
+                <!-- Cuando hay médicos disponibles -->
+                <option value="" disabled selected *ngIf="formCita.get('selectEspecialidad')?.value && listamedicos.length > 0" class="text-gray-400">
+                  Seleccione un médico
+                </option>
+                
+                <!-- Cuando no hay médicos disponibles en la especialidad -->
+                <option value="" disabled selected *ngIf="formCita.get('selectEspecialidad')?.value && listamedicos.length === 0" class="text-gray-400">
+                  No hay médicos disponibles
+                </option>
+                
                 <option
                   *ngFor="let medico of listamedicos"
                   [value]="medico.codigo"
@@ -201,14 +222,45 @@
                 </option>
               </select>
             </div>
-            <div
-              *ngIf="objhorario"
+            
+            <!-- Mensaje informativo cuando no se ha seleccionado especialidad -->
+            <div 
+              *ngIf="!formCita.get('selectEspecialidad')?.value" 
               class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg"
+            >
+              <div class="flex items-center">
+                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                <span class="text-sm font-medium text-blue-800">
+                  Debe seleccionar una especialidad primero
+                </span>
+              </div>
+            </div>
+            
+            <!-- Mensaje informativo cuando no hay médicos -->
+            <div 
+              *ngIf="listamedicos.length === 0 && formCita.get('selectEspecialidad')?.value" 
+              class="mt-3 p-3 "
+            >
+              <div class="flex items-center">
+                <i class="fas fa-exclamation-triangle text-red-600 mr-2"></i>
+                <span class="text-sm font-medium text-red-800">
+                  No hay médicos disponibles para la especialidad seleccionada
+                </span>
+              </div>
+              <p class="text-xs text-red-700 mt-1">
+                Por favor, seleccione otra especialidad o contacte con administración
+              </p>
+            </div>
+            
+            <!-- Información del horario del médico -->
+            <div
+              *ngIf="objhorario && listamedicos.length > 0"
+              class="mt-3 p-3 "
             >
               <span class="text-sm font-medium text-blue-800">
                 <i class="fas fa-clock text-blue-600 mr-2"></i>
-                Horario del médico: {{ objhorario?.hora_inicio }} -
-                {{ objhorario?.hora_fin }}
+                Horario del médico: {{ objhorario.hora_inicio }} -
+                {{ objhorario.hora_fin }}
               </span>
             </div>
           </div>

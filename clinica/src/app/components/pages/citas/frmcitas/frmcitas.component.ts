@@ -174,6 +174,10 @@ export class FrmcitasComponent {
 
     if (cbx.id === 'selectEspecialidad') {
       this.listamedicos = [];
+      // Limpiar la selección de médico cuando se cambia la especialidad
+      this.formCita.get('selectMedico')?.setValue('');
+      this.objhorario = undefined; // Limpiar el horario también
+      
       this.cargarMedicoEspecialidad(parseInt(cbx.value));
       this.codigoEspecialidad = parseInt(cbx.value);
       console.log('codigo de espe'+ this.codigoEspecialidad)
@@ -192,14 +196,26 @@ export class FrmcitasComponent {
     this.serviEspecialidades.LespecialidadesMedicos(id).subscribe({
       next: (res) => {
         this.listamedicos = res;
-        console.log(this.listaCitasMedicosVista);
+        
+        // Si no hay médicos, mostrar mensaje en consola y limpiar campos relacionados
+        if (res.length === 0) {
+          console.log('No hay médicos disponibles para esta especialidad');
+          this.formCita.get('selectMedico')?.setValue('');
+          this.objhorario = undefined;
+        }
+        
+        console.log('Médicos cargados:', this.listamedicos.length);
       },
       error: (err) => {
-        console.error('Error al cargar las citas del medico:', err.message);
+        console.error('Error al cargar médicos por especialidad:', err.message);
         this.alertaServ.error(
-          'No se pudo cargar la información del la cita medica',
-          'Comuniquese con su administrador de TI'
+          'Error al cargar médicos',
+          'No se pudo cargar la información de los médicos. Comuníquese con el administrador.'
         );
+        // En caso de error, limpiar la lista y campos relacionados
+        this.listamedicos = [];
+        this.formCita.get('selectMedico')?.setValue('');
+        this.objhorario = undefined;
       },
     });
   }
