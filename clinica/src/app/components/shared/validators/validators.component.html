@@ -34,6 +34,20 @@
     <span *ngIf="control.errors?.['pattern']">
       Formato inválido.
     </span>
+    <span *ngIf="control.errors?.['cedulaExists']">
+      Esta cédula ya está registrada en el sistema.
+    </span>
+  </span>
+</div>
+
+<!-- Validación pendiente (para validadores asíncronos) -->
+<div
+  *ngIf="control?.pending"
+  class="mt-2 flex items-center gap-2 p-2 bg-yellow-50 rounded-lg"
+>
+  <i class="fas fa-spinner fa-spin text-yellow-500 text-sm"></i>
+  <span class="text-yellow-700 text-sm">
+    Verificando disponibilidad...
   </span>
 </div>
 
