@@ -3,6 +3,8 @@ export interface  InUsuario{
     codigo_rol: string,	
 	nombre_usuario: string,
     contrasenia: string,
+    correoRecuperacion: string
+
     // estado:string,
 }
 
@@ -10,6 +12,7 @@ export interface InUsuarioVista {
     codigo_usuario: string,	
 	nombre_usuario: string,
     contrasenia: string,
+    correoRecuperacion: string,
     rol_nombre: string;
     rol_descripcion: string;
     estado:string,

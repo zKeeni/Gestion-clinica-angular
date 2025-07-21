@@ -99,4 +99,38 @@ export class AuthService {
 
     return true;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  enviarCodigoAcorreo(username : string) : Observable<any> {
+    return this.http.post('http://localhost:3000/recuperacion/enviarcodigo', {'nombreUsuario': username});
+  }
+
+
+    actualizarContrasenia(username: string, codigo: string, nuevaContrasenia: string): Observable<any> {
+   return this.http.post('http://localhost:3000/recuperacion/cambiarcontrasenia', { 'nombreUsuario':username, 'codigoIngresado':codigo, 'nuevoPassword':nuevaContrasenia });
+  }
+
 }

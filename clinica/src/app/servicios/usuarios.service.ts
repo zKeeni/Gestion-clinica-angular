@@ -42,4 +42,38 @@ export class UsuariosService {
 
     return this.http.put(`${this.urlServidor}/usuarios/Actualizar`, usuarios);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ObtenerCorreoCifrado(username: string): Observable<any> {
+
+       return this.http.post(`${this.urlServidor}/usuarios/recuperar/correo`,{ 'nombreUsuario': username });
+     }
 }

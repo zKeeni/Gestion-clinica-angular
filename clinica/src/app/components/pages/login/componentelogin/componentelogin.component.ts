@@ -1,12 +1,13 @@
 import { Component,  OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InLogin } from '../../../../modelos/InLogin';
 import { AuthService } from '../../../../servicios/authservicio.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-componenteloging',
-    imports: [ReactiveFormsModule],
+    imports: [RouterLink,ReactiveFormsModule,CommonModule],
     templateUrl: './componentelogin.component.html',
     styleUrl: './componentelogin.component.css'
 })
@@ -24,9 +25,11 @@ export class ComponenteloginComponent implements OnInit {
         
       });
   }
-  ngOnInit(): void { 
-  }
-
+  ngOnInit(): void {
+  this.formLogin.get('usuario')?.valueChanges.subscribe(value => {
+    console.log('Usuario:', value);
+  });
+}
   Login(): void {
 
     const usuarioLogin: InLogin = {
@@ -34,7 +37,6 @@ export class ComponenteloginComponent implements OnInit {
       contrasenia: this.formLogin.value.password
     };
 
-    console.log(usuarioLogin);
 
     this.authservicio.login(usuarioLogin).subscribe(
       {
@@ -42,7 +44,6 @@ export class ComponenteloginComponent implements OnInit {
           
           const token = res.token;
           this.authservicio.guardarToken(token);
-          console.log(this.authservicio.getToken());
           this.router.navigate(['home/dashboard']);
   
         },error:err =>{
@@ -53,6 +54,18 @@ export class ComponenteloginComponent implements OnInit {
     );
     }
     
+
+
+
+    get  Getusername(): string {
+      return this.formLogin.get('usuario')?.value || '';
+    }
+
+    //otra   forma de obtener el valor del usuario
+  get geTUser(){
+    return this.formLogin.get('usuario') as FormControl;
+
+  }
   }
 
 

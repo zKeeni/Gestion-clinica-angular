@@ -5,7 +5,7 @@ import { PanelcontenidoComponent } from "../panelcontenido/panelcontenido.compon
 
 @Component({
     selector: 'app-panelprincipal',
-    imports: [HeaderComponent, SidebarComponent, PanelcontenidoComponent],
+    imports: [ SidebarComponent, PanelcontenidoComponent],
     templateUrl: './panelprincipal.component.html',
     styleUrl: './panelprincipal.component.css'
 })

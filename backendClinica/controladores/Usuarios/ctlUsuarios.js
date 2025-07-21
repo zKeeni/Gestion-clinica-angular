@@ -29,9 +29,10 @@ exports.getUsuarioId = async (req, res) => {
   
 
   exports.registrarUsuario = async (req, res) => {
-    const { codigo_rol, nombre_usuario, contrasenia } = req.body;
-    const query = 'SELECT registrarUsuario($1, $2, $3) AS codigo';
-    const values = [codigo_rol, nombre_usuario, contrasenia];
+    const { codigo_rol, nombre_usuario, contrasenia, correoRecuperacion } = req.body;
+    const query = 'SELECT registrar_usuario($1, $2, $3, $4) AS codigo';
+    const values = [parseInt(codigo_rol), nombre_usuario, contrasenia, correoRecuperacion];
+    console.log("Datos a registrar:", values);
 
     try {
         const result = await pool.query(query, values);
@@ -49,9 +50,9 @@ exports.getUsuarioId = async (req, res) => {
 
 
 exports.actualizarUsuario = async (req, res) => {
-    const { codigo_usuario, codigo_rol, nombre_usuario, contrasenia, estado_usuario } = req.body;
-    const query = 'SELECT actualizarUsuario($1, $2, $3, $4, $5)';
-    const values = [codigo_usuario, codigo_rol, nombre_usuario, contrasenia, estado_usuario];
+    const { codigo_usuario, codigo_rol, nombre_usuario, contrasenia, estado_usuario, correoRecuperacion } = req.body;
+    const query = 'SELECT actualizarUsuario($1, $2, $3, $4, $5, $6)';
+    const values = [codigo_usuario, codigo_rol, nombre_usuario, contrasenia, estado_usuario, correoRecuperacion];
 
     try {
         await pool.query(query, values);

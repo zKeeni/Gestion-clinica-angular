@@ -23,10 +23,12 @@ import { AuthService } from './servicios/authservicio.service';
 import { RoleGuard } from './guards/role.guard';
 import { reporteHistorialComponent } from './components/pages/reportes/historialClinico/listahorarios/reporteHistorial.component';
 import { pagina404Component } from './components/ui/404/pagina404.component';
+import { RecuperarContraseniaComponent } from './components/pages/login/recuperarcontrasena/recuperarcontrasena.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: ComponenteloginComponent },
+  { path: 'login/recuperacion/:username', component: RecuperarContraseniaComponent },
   { path: '404', component: pagina404Component },
 
 

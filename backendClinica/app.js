@@ -34,5 +34,10 @@ app.use('/medicoespecialidad', rutasMedicoEspecialidad);
 app.use('/usuarios', rutasUsuarios);
 app.use('/roles', rutasRoles);
 
+
+
 app.post('/login',login.validacionUsers );
+
+app.post('/recuperacion/enviarcodigo',login.enviarCodigo  );
+app.post('/recuperacion/cambiarcontrasenia',login.cambiarContrasenia  );
 module.exports = app;

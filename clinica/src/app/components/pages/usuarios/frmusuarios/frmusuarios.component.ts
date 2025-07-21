@@ -46,6 +46,7 @@ export class FrmusuariosComponent {
       this.frmUsuario = this.formBuilder.group({
         txtNombreUsuario: ['', Validators.required],
         txtContrasenia: ['', Validators.required],
+        txtCorreoRecuperacion: ['',Validators.required,Validators.email],
         cbxMedicos: ['', Validators.required],
         cbxRoles: ['', Validators.required]
 
@@ -129,7 +130,8 @@ export class FrmusuariosComponent {
           this.frmUsuario.patchValue({
             txtNombreUsuario: usuario.nombre_usuario,
             txtContrasenia: usuario.contrasenia,
-            cbxRoles: usuario.codigo_rol
+            cbxRoles: usuario.codigo_rol,
+            txtCorreoRecuperacion: usuario.correoRecuperacion
             
           });
         },
@@ -144,7 +146,8 @@ export class FrmusuariosComponent {
       const usuario: InUsuario = {
         nombre_usuario: this.frmUsuario.value.txtNombreUsuario,
         contrasenia: this.frmUsuario.value.txtContrasenia,
-        codigo_rol: this.frmUsuario.value.cbxRoles,          
+        codigo_rol: this.frmUsuario.value.cbxRoles,      
+        correoRecuperacion: this.frmUsuario.value.txtCorreoRecuperacion,    
         codigo: '',
       };
     

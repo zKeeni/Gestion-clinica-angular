@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const controladorUsuarios = require('../controladores/Usuarios/ctlUsuarios');
+const controladorLogin = require('../controladores/Login/ctlLogin');
+
 const authenticateToken = require('../middleware/auth');
 
 
@@ -18,7 +20,6 @@ router.post('/Registrar', authenticateToken,
 
 router.put('/Actualizar', authenticateToken,
     controladorUsuarios.actualizarUsuario);
-
-
+router.post('/recuperar/correo', controladorLogin.obtenerCorreo);
 
 module.exports = router; 
