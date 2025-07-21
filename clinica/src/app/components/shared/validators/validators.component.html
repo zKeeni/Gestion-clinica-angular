@@ -37,6 +37,9 @@
     <span *ngIf="control.errors?.['cedulaExists']">
       Esta cédula ya está registrada en el sistema.
     </span>
+    <span *ngIf="control.errors?.['pacienteNoEncontrado']">
+      No se encontró ningún paciente con la cédula ingresada. Verifique el número o registre al paciente primero.
+    </span>
   </span>
 </div>
 

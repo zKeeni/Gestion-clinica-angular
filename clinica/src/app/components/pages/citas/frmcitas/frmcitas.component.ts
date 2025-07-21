@@ -25,6 +25,7 @@ import { InCitasVista } from '../../../../modelos/modeloCitas/InCitasVista';
 import { InCitas } from '../../../../modelos/modeloCitas/InCitas';
 import { citasService } from '../../../../servicios/citas.service';
 import { AlertService } from '../../../../servicios/Alertas/alertas.service';
+import { ValidatorsComponent } from '../../../shared/validators/validators.component';
 
 @Component({
     selector: 'app-frmcitas',
@@ -33,6 +34,7 @@ import { AlertService } from '../../../../servicios/Alertas/alertas.service';
         ReactiveFormsModule,
         RouterModule,
         FullCalendarModule,
+        ValidatorsComponent,
     ],
     templateUrl: './frmcitas.component.html',
     styleUrl: './frmcitas.component.css'
@@ -69,7 +71,7 @@ export class FrmcitasComponent {
     private alertaServ: AlertService
   ) {
     this.formCita = this.formBuilder.group({
-      txtCedulaPaci: ['',Validators.required],
+      txtCedulaPaci: ['', [Validators.required, ValidatorsComponent.numericTenDigits]],
       txtNombrePaci: [{ value: '', disabled: true }],
       txtApellidoPaci: [{ value: '', disabled: true }],
       txtEdadPaci: [{ value: '', disabled: true }],
@@ -109,8 +111,11 @@ export class FrmcitasComponent {
     },
 
     eventClick: (info) => {
-      // Mostrar mensaje o acción personalizada
-      alert('Espacio ocupado');
+      // Mostrar mensaje con el servicio de alertas personalizado
+      this.alertaServ.info(
+        'Espacio ocupado',
+        'Este horario ya tiene una cita programada. Por favor, seleccione otro horario disponible.'
+      );
       console.log('Información del evento:', info.event);
     },
   };
@@ -150,6 +155,12 @@ export class FrmcitasComponent {
 
   buscarPacienteCedula() {
     const cedula = this.formCita.get('txtCedulaPaci')?.value;
+    const cedulaControl = this.formCita.get('txtCedulaPaci');
+
+    // Limpiar errores personalizados previos
+    if (cedulaControl?.hasError('pacienteNoEncontrado')) {
+      cedulaControl.setErrors(null);
+    }
 
     this.serviPacientes.LPacientesCedulaEstado(cedula, true).subscribe({
       next: (res) => {
@@ -161,9 +172,33 @@ export class FrmcitasComponent {
           txtApellidoPaci: this.objpaciente.apellido,
           txtEdadPaci: this.objpaciente.edad,
         });
+        
+        // Limpiar cualquier error previo si se encuentra el paciente
+        if (cedulaControl?.hasError('pacienteNoEncontrado')) {
+          const errors = { ...cedulaControl.errors };
+          delete errors['pacienteNoEncontrado'];
+          cedulaControl.setErrors(Object.keys(errors).length > 0 ? errors : null);
+        }
       },
       error: (err) => {
-        console.log(err);
+        console.log('Error al buscar paciente:', err);
+        
+        // Agregar error personalizado al control
+        const currentErrors = cedulaControl?.errors || {};
+        cedulaControl?.setErrors({
+          ...currentErrors,
+          pacienteNoEncontrado: true
+        });
+        
+        // Limpiar datos del paciente
+        this.objpaciente = undefined;
+        this.codigoPacienteCita = 0;
+        
+        this.formCita.patchValue({
+          txtNombrePaci: '',
+          txtApellidoPaci: '',
+          txtEdadPaci: '',
+        });
       },
     });
   }
@@ -174,6 +209,10 @@ export class FrmcitasComponent {
 
     if (cbx.id === 'selectEspecialidad') {
       this.listamedicos = [];
+      // Limpiar la selección de médico cuando se cambia la especialidad
+      this.formCita.get('selectMedico')?.setValue('');
+      this.objhorario = undefined; // Limpiar el horario también
+      
       this.cargarMedicoEspecialidad(parseInt(cbx.value));
       this.codigoEspecialidad = parseInt(cbx.value);
       console.log('codigo de espe'+ this.codigoEspecialidad)
@@ -192,14 +231,26 @@ export class FrmcitasComponent {
     this.serviEspecialidades.LespecialidadesMedicos(id).subscribe({
       next: (res) => {
         this.listamedicos = res;
-        console.log(this.listaCitasMedicosVista);
+        
+        // Si no hay médicos, mostrar mensaje en consola y limpiar campos relacionados
+        if (res.length === 0) {
+          console.log('No hay médicos disponibles para esta especialidad');
+          this.formCita.get('selectMedico')?.setValue('');
+          this.objhorario = undefined;
+        }
+        
+        console.log('Médicos cargados:', this.listamedicos.length);
       },
       error: (err) => {
-        console.error('Error al cargar las citas del medico:', err.message);
+        console.error('Error al cargar médicos por especialidad:', err.message);
         this.alertaServ.error(
-          'No se pudo cargar la información del la cita medica',
-          'Comuniquese con su administrador de TI'
+          'Error al cargar médicos',
+          'No se pudo cargar la información de los médicos. Comuníquese con el administrador.'
         );
+        // En caso de error, limpiar la lista y campos relacionados
+        this.listamedicos = [];
+        this.formCita.get('selectMedico')?.setValue('');
+        this.objhorario = undefined;
       },
     });
   }
@@ -326,9 +377,9 @@ export class FrmcitasComponent {
       this.serviCitas.CrearCita(cita).subscribe({
         next: (res) => {
           this.alertaServ.success('Cita registrada con éxito.', '');
-          //            this.router.navigate(['home/citas']);
-
-          this.cargarMedicoCitas(this.codigoMedicoCita);
+          
+          // Limpiar el formulario y reiniciar el calendario
+          this.limpiarFormularioYCalendario();
         },
         error: (err) => {
           console.log('Error al crear consultorio:', err);
@@ -347,5 +398,81 @@ export class FrmcitasComponent {
         control.markAsTouched();
       }
     });
+  }
+
+  limpiarFormularioYCalendario(): void {
+    // Limpiar el formulario reactivo
+    this.formCita.reset();
+    
+    // Limpiar errores personalizados del FormControl de cédula
+    this.formCita.get('txtCedulaPaci')?.setErrors(null);
+    
+    // Limpiar las variables del componente
+    this.objpaciente = undefined;
+    this.objhorario = undefined;
+    this.listamedicos = [];
+    this.listaCitasMedicosVista = [];
+    this.cedulaPac = '';
+    
+    this.codigoCita = 0;
+    this.codigoMedicoCita = 0;
+    this.codigoEspecialidad = 0;
+    this.codigoPacienteCita = 0;
+    this.horaCita = '';
+    this.fechaCita = '';
+    this.antecedentesCita = '';
+    this.motivoCita = '';
+    this.eventoUpdate = false;
+    
+    // Limpiar selecciones visuales del calendario
+    const casillasSeleccionadas = document.querySelectorAll('.celda-seleccionada');
+    casillasSeleccionadas.forEach(casilla => {
+      casilla.classList.remove('celda-seleccionada');
+    });
+    
+    // Limpiar estilos de celdas verdes del handleSelect
+    const celdasVerdes = document.querySelectorAll('.fc-timegrid-slot[style*="background-color"]');
+    celdasVerdes.forEach(celda => {
+      (celda as HTMLElement).style.backgroundColor = '';
+    });
+    
+    // Reiniciar completamente el calendario sin eventos
+    this.calendarOptions = {
+      height: 'auto',
+      allDaySlot: false,
+      locale: 'es',
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+      initialView: 'timeGridWeek',
+      weekends: true,
+      dateClick: (arg) => this.manejarFechas(arg),
+      select: this.handleSelect.bind(this),
+      selectable: true,
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      },
+      slotDuration: '01:00:00',
+      validRange: {
+        start: new Date(), // Restringir selecciones a partir de la fecha y hora actual
+      },
+      slotMinTime: this.getSlotMinTime(), // Hora mínima disponible
+      slotMaxTime: '22:00:00', // La última hora disponible es 22:00
+      events: [], // Sin eventos - calendario limpio
+      selectAllow: (selectInfo) => {
+        const now = new Date(); // Hora actual
+        return selectInfo.start >= now; // Permitir solo si la hora seleccionada es futura
+      },
+      eventClick: (info) => {
+        // Mostrar mensaje con el servicio de alertas personalizado
+        this.alertaServ.info(
+          'Espacio ocupado',
+          'Este horario ya tiene una cita programada. Por favor, seleccione otro horario disponible.'
+        );
+        console.log('Información del evento:', info.event);
+      },
+    };
+    
+    console.log('Formulario y calendario limpiados exitosamente');
   }
 }
