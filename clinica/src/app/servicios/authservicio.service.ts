@@ -121,7 +121,16 @@ export class AuthService {
 
 
 
+  loginConOTP(datos: any) {
+    return this.http.post<any>('http://localhost:3000/usuarios/login-otp', datos);
+  }
 
+  verificarOTP(codigo_usuario: number, codigo_otp: string) {
+    return this.http.post<any>('http://localhost:3000/usuarios/validar-otp', {
+      codigo_usuario,
+      codigo_otp
+    });
+  }
   
    
   enviarCodigoAcorreo(username : string) : Observable<any> {

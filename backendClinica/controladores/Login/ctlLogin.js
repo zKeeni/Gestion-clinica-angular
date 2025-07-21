@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
-
 exports.validacionUsers = async (req, res) => {
   const { nombre_usuario, contrasenia } = req.body;
   // Actualiza la query para incluir el LEFT JOIN con la tabla medico
@@ -57,9 +56,10 @@ WHERE u.nombre_usuario = $1
     console.error(error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
+
+
+  
 };
-
-
 
 
 
