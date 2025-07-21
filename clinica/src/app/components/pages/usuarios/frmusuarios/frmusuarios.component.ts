@@ -46,8 +46,8 @@ export class FrmusuariosComponent {
     ) {
       this.frmUsuario = this.formBuilder.group({
         txtNombreUsuario: ['', Validators.required],
+        txtCorreoUsuario: ['', [Validators.required, Validators.email]],
         txtContrasenia: ['', Validators.required],
-        txtCorreoRecuperacion: ['',Validators.required,Validators.email],
         cbxMedicos: ['', Validators.required],
         cbxRoles: ['', Validators.required]
       });
@@ -142,8 +142,8 @@ export class FrmusuariosComponent {
             txtNombreUsuario: usuario.nombre_usuario,
             txtContrasenia: usuario.contrasenia,
             cbxRoles: usuario.codigo_rol,
-            txtCorreoRecuperacion: usuario.correoRecuperacion
-            
+            txtCorreoUsuario: usuario.email
+
           });
         },
         error: (err) => {
@@ -153,99 +153,111 @@ export class FrmusuariosComponent {
       });
     }
   
-    guardarUsuario(): void {
-      // Primero marcar todos los campos como tocados para mostrar errores
-      this.marcarCamposComoTocados();
+guardarUsuario(): void {
+  this.marcarCamposComoTocados();
 
-      // Verificar si el formulario tiene errores (campos obligatorios)
-      if (this.frmUsuario.invalid) {
-        // Verificar qué campos específicos tienen errores
-        const camposConError = [];
-        
-        if (this.frmUsuario.get('txtNombreUsuario')?.invalid) {
-          camposConError.push('Nombre de Usuario');
-        }
-        if (this.frmUsuario.get('txtContrasenia')?.invalid) {
-          camposConError.push('Contraseña');
-        }
-        if (this.frmUsuario.get('cbxRoles')?.invalid) {
-          camposConError.push('Rol del Sistema');
-        }
-        if (this.isMedicoSelected && this.frmUsuario.get('cbxMedicos')?.invalid) {
-          camposConError.push('Médico Asignado');
-        }
+  if (this.frmUsuario.invalid) {
+    const camposConError: string[] = [];
 
-        if (camposConError.length > 0) {
+    if (this.frmUsuario.get('txtNombreUsuario')?.invalid) {
+      camposConError.push('Nombre de Usuario');
+    }
+
+    if (this.frmUsuario.get('txtCorreoUsuario')?.invalid) {
+      camposConError.push('Correo de Usuario');
+    }
+
+    if (this.frmUsuario.get('txtContrasenia')?.invalid) {
+      camposConError.push('Contraseña');
+    }
+
+    if (this.frmUsuario.get('cbxRoles')?.invalid) {
+      camposConError.push('Rol del Sistema');
+    }
+
+    if (this.isMedicoSelected && this.frmUsuario.get('cbxMedicos')?.invalid) {
+      camposConError.push('Médico Asignado');
+    }
+
+    Swal.fire({
+      title: 'Campos Requeridos',
+      text: `Ingrese correctamente los siguientes campos: ${camposConError.join(', ')}`,
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: 'Entendido'
+    });
+
+    return;
+  }
+
+  const usuario: InUsuario = {
+    nombre_usuario: this.frmUsuario.value.txtNombreUsuario,
+    contrasenia: this.frmUsuario.value.txtContrasenia,
+    codigo_rol: this.frmUsuario.value.cbxRoles,
+    email: this.frmUsuario.value.txtCorreoUsuario,
+    codigo: this.eventoUpdate ? String(this.codigo) : '',
+  };
+
+  const codigoMedico = this.frmUsuario.value.cbxMedicos;
+
+  if (this.eventoUpdate) {
+    this.usuarioServ.ActualizarUsuario(usuario).subscribe({
+      next: () => {
+        Swal.fire({
+          title: 'Usuario actualizado',
+          text: 'Los datos del usuario fueron actualizados con éxito.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+        }).then(() => {
+          this.router.navigate(['home/listausuarios']);
+        });
+      },
+      error: (err) => {
+        console.error('Error al actualizar usuario:', err);
+        Swal.fire('Error', 'Hubo un problema al actualizar el usuario.', 'error');
+      }
+    });
+  } else {
+    this.usuarioServ.CrearUsuario(usuario).subscribe({
+      next: (res: any) => {
+        const nuevoIdUsuario = res.codigo_usuario;
+
+        if (this.isMedicoSelected && codigoMedico) {
+          this.medicoServ.AsignarUsuario(codigoMedico, nuevoIdUsuario).subscribe({
+            next: () => {
+              Swal.fire({
+                title: 'Usuario registrado',
+                text: 'El usuario fue registrado y asignado al médico con éxito.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+              }).then(() => {
+                this.router.navigate(['home/listausuarios']);
+              });
+            },
+            error: (err) => {
+              console.error('Error al asignar usuario al médico:', err);
+              Swal.fire('Error', 'Hubo un problema al asignar el usuario al médico.', 'error');
+            }
+          });
+        } else {
           Swal.fire({
-            title: 'Campos Requeridos',
-            text: 'Ingrese correctamente los valores. Complete los siguientes campos: ' + camposConError.join(', '),
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Entendido'
+            title: 'Usuario registrado',
+            text: 'El usuario fue registrado con éxito.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+          }).then(() => {
+            this.router.navigate(['home/listausuarios']);
           });
         }
-        return;
+      },
+      error: (err) => {
+        console.error('Error al crear usuario:', err);
+        Swal.fire('Error', 'Hubo un problema al registrar el usuario.', 'error');
       }
-      const usuario: InUsuario = {
-        nombre_usuario: this.frmUsuario.value.txtNombreUsuario,
-        contrasenia: this.frmUsuario.value.txtContrasenia,
-        codigo_rol: this.frmUsuario.value.cbxRoles,      
-        correoRecuperacion: this.frmUsuario.value.txtCorreoRecuperacion,    
-        codigo: '',
-      };
-    
-      const codigoMedico = this.frmUsuario.value.cbxMedicos;  
-    
-      if (this.eventoUpdate) {
-        usuario.codigo = '' + this.codigo;
-        this.usuarioServ.ActualizarUsuario(usuario).subscribe({
-          next: (res) => {
-            Swal.fire({
-              title: 'Usuario actualizado',
-              text: 'Los datos del usuario fueron actualizados con éxito.',
-              icon: 'success',
-              confirmButtonText: 'Aceptar',
-            }).then(() => {
-              this.router.navigate(['home/listausuarios']);
-            });
-          },
-          error: (err) => {
-            console.log('Error al actualizar usuario:', err);
-            Swal.fire('Error', 'Hubo un problema al actualizar el usuario.', 'error');
-          },
-        });
-      } else {
-        this.usuarioServ.CrearUsuario(usuario).subscribe({
-          next: (res: any) => {
-            const nuevoIdUsuario = res.codigo_usuario;  
-    
-            console.log(nuevoIdUsuario, codigoMedico + "AAAA");
+    });
+  }
+}
 
-            this.medicoServ.AsignarUsuario(codigoMedico, nuevoIdUsuario).subscribe({
-              next: () => {
-                Swal.fire({
-                  title: 'Usuario registrado',
-                  text: 'El usuario fue registrado con éxito.',
-                  icon: 'success',
-                  confirmButtonText: 'Aceptar',
-                }).then(() => {
-                  this.router.navigate(['home/listausuarios']);
-                });
-              },
-              error: (err) => {
-                console.log('Error al asignar usuario al médico:', err);
-                Swal.fire('Error', 'Hubo un problema al asignar el usuario al médico.', 'error');
-              }
-            });
-          },
-          error: (err) => {
-            console.log('Error al crear usuario:', err);
-            Swal.fire('Error', 'Hubo un problema al registrar el usuario.', 'error');
-          },
-        });
-      }
-    }
-    
     marcarCamposComoTocados(): void {
       Object.keys(this.frmUsuario.controls).forEach((campo) => {
         const control = this.frmUsuario.get(campo);

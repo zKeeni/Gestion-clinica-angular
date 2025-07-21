@@ -13,10 +13,6 @@ export class UsuariosService {
 
   constructor(private http: HttpClient) { }
   
-  // LhorariosId(id: number): Observable<InUsuarios> {
-
-  //   return this.http.get<InUsuarios[]>(`${this.urlServidor}/horarios/${id}`).pipe(map((horarios) => horarios[0]));
-  // }
 
   LUsuarios (): Observable<InUsuarioVista[]> {
 
@@ -42,34 +38,6 @@ export class UsuariosService {
 
     return this.http.put(`${this.urlServidor}/usuarios/Actualizar`, usuarios);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
    ObtenerCorreoCifrado(username: string): Observable<any> {

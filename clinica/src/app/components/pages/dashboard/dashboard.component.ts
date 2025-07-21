@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../servicios/authservicio.service';
 import { MedicosService } from '../../../servicios/medicos.service';
+import { DirectivasModule } from '../../../directivas/directivas.module';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-dashboard',
-    imports: [],
+    imports: [RouterLink,DirectivasModule],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css'
 })
