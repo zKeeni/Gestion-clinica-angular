@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { InCitaPacienteLista } from '../../../../modelos/modeloCitas/InCitaPacienteLista';
 import { citasService } from '../../../../servicios/citas.service';
 import { MedicosService } from '../../../../servicios/medicos.service';
@@ -12,14 +13,22 @@ import { DirectivasModule } from '../../../../directivas/directivas.module';
 
 @Component({
     selector: 'app-listaconsultas',
-    imports: [CommonModule, RouterModule, DirectivasModule],
+    imports: [CommonModule, RouterModule, DirectivasModule, FormsModule],
     templateUrl: './listaconsultas.component.html',
     styleUrl: './listaconsultas.component.css'
 })
 export class listaConsultasComponent {
   listaCitasPacientesP: InCitaPacienteLista[] = [];
+  listaCitasPacientesFiltrada: InCitaPacienteLista[] = [];
   listaMedicos: InMedico[] = [];
   codigoMedico: number = 0;
+
+  // Objeto para almacenar los filtros
+  filtros = {
+    busquedaPaciente: '',
+    fecha: '',
+    hora: ''
+  };
 
   constructor(
     private http: HttpClient,
@@ -56,6 +65,19 @@ export class listaConsultasComponent {
     this.servicioCitas.LcitasPacientesPendientes(codigo, estado).subscribe({
       next: (res) => {
         this.listaCitasPacientesP = res;
+        this.listaCitasPacientesFiltrada = [...res]; // Copia para filtrado
+        
+        // Debug: mostrar formato de fecha y hora
+        if (res.length > 0) {
+          console.log('=== FORMATO DE DATOS ===');
+          console.log('Primer registro completo:', res[0]);
+          console.log('Fecha formato:', res[0].fecha_cita, '- Tipo:', typeof res[0].fecha_cita);
+          console.log('Hora formato:', res[0].hora_cita, '- Tipo:', typeof res[0].hora_cita);
+          console.log('========================');
+        }
+        
+        // Aplicar filtros existentes si los hay
+        this.aplicarFiltros();
       },
       error: (err) => {
         this.ServicioAlertas.infoEventoConfir(
@@ -93,5 +115,98 @@ export class listaConsultasComponent {
         edad: citaPaciente.edad,
       },
     });
+  }
+
+  // Método para aplicar todos los filtros
+  aplicarFiltros(): void {
+    let resultadoFiltrado = [...this.listaCitasPacientesP];
+
+    console.log('Aplicando filtros:', this.filtros);
+
+    // Filtro por búsqueda de paciente (cédula o nombre)
+    if (this.filtros.busquedaPaciente.trim()) {
+      const busqueda = this.filtros.busquedaPaciente.toLowerCase().trim();
+      resultadoFiltrado = resultadoFiltrado.filter(cita => 
+        cita.cedula.toLowerCase().includes(busqueda) ||
+        cita.nombre_completo.toLowerCase().includes(busqueda)
+      );
+    }
+
+    // Filtro por fecha
+    if (this.filtros.fecha) {
+      console.log('Filtro fecha seleccionada:', this.filtros.fecha);
+      resultadoFiltrado = resultadoFiltrado.filter(cita => {
+        // Convertir la fecha del input (YYYY-MM-DD) al formato que está en la BD
+        const fechaBusqueda = this.convertirFechaParaBusqueda(this.filtros.fecha);
+        console.log('Buscando fecha:', fechaBusqueda, 'en:', cita.fecha_cita);
+        return cita.fecha_cita.includes(fechaBusqueda);
+      });
+    }
+
+    // Filtro por hora
+    if (this.filtros.hora) {
+      console.log('Filtro hora seleccionada:', this.filtros.hora);
+      resultadoFiltrado = resultadoFiltrado.filter(cita => {
+        // Convertir la hora del filtro (formato 24h) al formato de la BD (12h con AM/PM)
+        const horaBusqueda = this.convertirHoraParaBusqueda(this.filtros.hora);
+        console.log('Buscando hora:', horaBusqueda, 'en:', cita.hora_cita);
+        return cita.hora_cita === horaBusqueda;
+      });
+    }
+
+    console.log('Resultado filtrado:', resultadoFiltrado);
+    this.listaCitasPacientesFiltrada = resultadoFiltrado;
+  }
+
+  // Método para convertir fecha de YYYY-MM-DD a formato de búsqueda
+  convertirFechaParaBusqueda(fecha: string): string {
+    if (!fecha) return '';
+    
+    const [year, month, day] = fecha.split('-');
+    const meses = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+    
+    const numeroMes = parseInt(month) - 1;
+    const nombreMes = meses[numeroMes];
+    const numeroDia = parseInt(day);
+    
+    // Formato: "21 de Julio de 2025"
+    return `${numeroDia} de ${nombreMes} de ${year}`;
+  }
+
+  // Método para convertir hora de 24h a 12h con AM/PM
+  convertirHoraParaBusqueda(hora: string): string {
+    if (!hora) return '';
+    
+    const [horas, minutos] = hora.split(':');
+    let horaNum = parseInt(horas);
+    const min = minutos;
+    
+    let periodo = 'AM';
+    
+    if (horaNum === 0) {
+      horaNum = 12;
+    } else if (horaNum === 12) {
+      periodo = 'PM';
+    } else if (horaNum > 12) {
+      horaNum = horaNum - 12;
+      periodo = 'PM';
+    }
+    
+    // Formato: "07:00 PM"
+    const horaFormateada = horaNum.toString().padStart(2, '0');
+    return `${horaFormateada}:${min} ${periodo}`;
+  }
+
+  // Método para limpiar todos los filtros
+  limpiarFiltros(): void {
+    this.filtros = {
+      busquedaPaciente: '',
+      fecha: '',
+      hora: ''
+    };
+    this.aplicarFiltros();
   }
 }
