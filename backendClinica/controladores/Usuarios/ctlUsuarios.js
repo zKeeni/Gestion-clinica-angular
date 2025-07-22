@@ -50,9 +50,9 @@ exports.getUsuarioId = async (req, res) => {
 
 
 exports.actualizarUsuario = async (req, res) => {
-    const { codigo_usuario, codigo_rol, nombre_usuario, contrasenia, estado_usuario, correoRecuperacion } = req.body;
-    const query = 'SELECT actualizarUsuario($1, $2, $3, $4, $5, $6)';
-    const values = [codigo_usuario, codigo_rol, nombre_usuario, contrasenia, estado_usuario, correoRecuperacion];
+    const { codigo_usuario, codigo_rol, nombre_usuario, contrasenia, email, estado_usuario  } = req.body;
+    const query = 'SELECT actualizar_usuario($1, $2, $3, $4, $5, $6)';
+    const values = [codigo_usuario, codigo_rol, nombre_usuario, contrasenia, email, estado_usuario, ];
 
     try {
         await pool.query(query, values);

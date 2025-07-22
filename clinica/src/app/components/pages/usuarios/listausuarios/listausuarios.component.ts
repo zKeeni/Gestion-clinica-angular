@@ -111,7 +111,7 @@ export class ListausuariosComponent {
       }
   
   ActualizarUsuario(id: any): void {
-    this.router.navigate(['/administracion/usuarios/editarUsuarios', id]);
+    this.router.navigate(['home/actualizarUsuarios', id]);
   }
 
   /**

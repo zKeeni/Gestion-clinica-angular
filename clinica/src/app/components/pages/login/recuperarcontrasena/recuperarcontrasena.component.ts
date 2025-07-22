@@ -8,14 +8,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UsuariosService } from '../../../../servicios/usuarios.service';
 import { AuthService } from '../../../../servicios/authservicio.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-recuperarcontrasena',
-  imports: [ReactiveFormsModule ,CommonModule ],
+  imports: [ReactiveFormsModule ,CommonModule,RouterLink ],
   templateUrl: './recuperarcontrasena.component.html',
   styleUrl: './recuperarcontrasena.component.css',
 })
