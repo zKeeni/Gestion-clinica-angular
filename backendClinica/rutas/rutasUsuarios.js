@@ -6,11 +6,9 @@ const controladorVerificacion = require('../controladores/Verificacion-otp/ctlVe
 
 const authenticateToken = require('../middleware/auth');
 
-router.post('/login-otp', 
-    controladorVerificacion.loginConOTP);
-    
-router.post('/validar-otp', 
-    controladorVerificacion.validarOTP);
+// Rutas de verificación OTP
+router.post('/reenviar-otp', 
+    controladorVerificacion.reenviarOTP);
 
 router.get('/listar', authenticateToken,
     controladorUsuarios.getUsuarios);

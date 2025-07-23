@@ -4,9 +4,15 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const SessionManager = require('../../middleware/sessionManager');
+const { sendOTPEmail } = require('../../utils/sendEmail');
+
+// Función auxiliar para generar código OTP
+function generarCodigoOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString(); // 6 dígitos
+}
 
 exports.validacionUsers = async (req, res) => {
-  const { nombre_usuario, contrasenia } = req.body;
+  const { nombre_usuario, contrasenia, codigo_otp } = req.body;
   
   // Validación básica
   if (!nombre_usuario || !contrasenia) {
@@ -16,22 +22,22 @@ exports.validacionUsers = async (req, res) => {
     });
   }
   
-  // Actualiza la query para incluir el LEFT JOIN con la tabla medico
+  // Query para obtener datos del usuario incluyendo email
   const query = `
     SELECT 
-  u.codigo AS id_usuario, 
-  u.nombre_usuario,
-  u.contrasenia,  
-  r.nombre AS rol,
-  m.codigo AS codigo_medico,
-  m.nombre as nombre_medico,
-  m.apellido as apellido_medico
-FROM usuario u
-JOIN rol r ON u.codigo_rol = r.codigo
-LEFT JOIN medico m ON u.codigo = m.codigo_usuario
-WHERE u.nombre_usuario = $1
-  AND u.estado = true;
-
+      u.codigo AS id_usuario, 
+      u.nombre_usuario,
+      u.contrasenia,
+      u.email,
+      r.nombre AS rol,
+      m.codigo AS codigo_medico,
+      m.nombre as nombre_medico,
+      m.apellido as apellido_medico
+    FROM usuario u
+    JOIN rol r ON u.codigo_rol = r.codigo
+    LEFT JOIN medico m ON u.codigo = m.codigo_usuario
+    WHERE u.nombre_usuario = $1
+      AND u.estado = true;
   `;
   const values = [nombre_usuario];
 
@@ -54,6 +60,53 @@ WHERE u.nombre_usuario = $1
         message: 'Contraseña Incorrecta' 
       });
     }
+
+    // Si no se proporciona código OTP, enviar uno y solicitar verificación
+    if (!codigo_otp) {
+      try {
+        const codigoOTP = generarCodigoOTP();
+        await pool.query(
+          'INSERT INTO verificacion_2pasos (codigo_usuario, codigo_otp) VALUES ($1, $2)',
+          [usuario.id_usuario, codigoOTP]
+        );
+
+        await sendOTPEmail(usuario.email, codigoOTP);
+
+        return res.json({ 
+          success: true,
+          requiresOTP: true,
+          message: 'Código OTP enviado al correo',
+          usuario_codigo: usuario.id_usuario 
+        });
+      } catch (otpError) {
+        console.error('Error enviando OTP:', otpError);
+        return res.status(500).json({
+          success: false,
+          message: 'Error enviando código de verificación'
+        });
+      }
+    }
+
+    // Si se proporciona código OTP, validarlo
+    const otpResult = await pool.query(
+      `	   SELECT * FROM verificacion_2pasos
+       WHERE codigo_usuario = $1 AND codigo_otp = $2 AND expirado = false
+       ORDER BY creado_en DESC LIMIT 1`,
+      [usuario.id_usuario, codigo_otp]
+    );
+
+    if (otpResult.rows.length === 0) {
+      return res.status(401).json({ 
+        success: false,
+        message: 'Código OTP incorrecto o expirado' 
+      });
+    }
+
+    // Marcar OTP como usado
+    await pool.query(
+      `UPDATE verificacion_2pasos SET expirado = true WHERE id = $1`, 
+      [otpResult.rows[0].id]
+    );
 
     // Generar ID único para el token (JWT ID)
     const tokenJti = crypto.randomUUID();
@@ -78,6 +131,7 @@ WHERE u.nombre_usuario = $1
     const ipAddress = req.ip || req.connection.remoteAddress || req.socket.remoteAddress;
     const deviceFingerprint = SessionManager.generateDeviceFingerprint(userAgent, ipAddress);
     
+    console.log('Fingerprint generado:', deviceFingerprint);
     // Crear sesión activa
     const sessionResult = await SessionManager.createSession(usuario.id_usuario, tokenJti, {
       userAgent,

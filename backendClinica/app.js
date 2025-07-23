@@ -16,6 +16,7 @@ const rutasUsuarios = require('./rutas/rutasUsuarios');
 const rutasRoles = require('./rutas/rutasRoles');
 
 const login = require('./controladores/Login/ctlLogin');
+const verificacion = require('./controladores/Verificacion-otp/ctlVerificacion');
 const authenticateToken = require('./middleware/auth');
 
 const app = express();
@@ -46,4 +47,7 @@ app.post('/invalidar-otras-sesiones', authenticateToken, login.invalidarOtrasSes
 
 app.post('/recuperacion/enviarcodigo',login.enviarCodigo  );
 app.post('/recuperacion/cambiarcontrasenia',login.cambiarContrasenia  );
+
+// Ruta para verificar OTP
+app.post('/validar-otp', verificacion.validarOTP);
 module.exports = app;
