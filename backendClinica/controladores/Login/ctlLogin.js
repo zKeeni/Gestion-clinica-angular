@@ -60,7 +60,7 @@ WHERE u.nombre_usuario = $1
     
     // Crear el JWT incluyendo el código del médico y jti
     const token = jwt.sign(
-      {  
+      { 
         id: usuario.id_usuario, 
         nombreUsuario: usuario.nombre_usuario, 
         rol: usuario.rol,
@@ -192,9 +192,14 @@ exports.invalidarOtrasSesiones = async (req, res) => {
       message: 'Error invalidando otras sesiones'
     });
   }
+
+
+  
 };
 
- exports.obtenerCorreo = async (req, res) => {
+
+
+  exports.obtenerCorreo = async (req, res) => {
   const { nombreUsuario } = req.body;
 console.log(nombreUsuario);
   const query = `
