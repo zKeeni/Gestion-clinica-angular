@@ -16,6 +16,7 @@ const rutasUsuarios = require('./rutas/rutasUsuarios');
 const rutasRoles = require('./rutas/rutasRoles');
 
 const login = require('./controladores/Login/ctlLogin');
+const authenticateToken = require('./middleware/auth');
 
 const app = express();
 // Middleware
@@ -36,7 +37,12 @@ app.use('/roles', rutasRoles);
 
 
 
-app.post('/login',login.validacionUsers );
+// Rutas de autenticación
+app.post('/login', login.validacionUsers);
+app.post('/logout', authenticateToken, login.logout);
+app.get('/sesiones-activas', authenticateToken, login.getSesionesActivas);
+app.post('/invalidar-otras-sesiones', authenticateToken, login.invalidarOtrasSesiones);
+
 
 app.post('/recuperacion/enviarcodigo',login.enviarCodigo  );
 app.post('/recuperacion/cambiarcontrasenia',login.cambiarContrasenia  );
