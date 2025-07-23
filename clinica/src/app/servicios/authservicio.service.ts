@@ -100,33 +100,12 @@ export class AuthService {
     return true;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   loginConOTP(datos: any) {
-    return this.http.post<any>('http://localhost:3000/usuarios/login-otp', datos);
+    return this.http.post<any>('http://localhost:3000/login', datos);
   }
 
   verificarOTP(codigo_usuario: number, codigo_otp: string) {
-    return this.http.post<any>('http://localhost:3000/usuarios/validar-otp', {
+    return this.http.post<any>('http://localhost:3000/validar-otp', {
       codigo_usuario,
       codigo_otp
     });
